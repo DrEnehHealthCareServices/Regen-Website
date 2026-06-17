@@ -12,6 +12,7 @@ export default function Contact() {
 
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,22 +48,46 @@ export default function Contact() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      // Form is valid - process submission
-      console.log('Form data submitted:', formData);
-      setIsSubmitted(true);
-      setFormData({
-        firstName: '',
-        email: '',
-        phone: '',
-        message: ''
-      });
-      setErrors({});
+      setIsSubmitting(true);
+      try {
+        const response = await fetch("https://formsubmit.co/ajax/info@regencareafrica.com", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            Name: formData.firstName,
+            Email: formData.email,
+            Phone: formData.phone,
+            Message: formData.message
+          })
+        });
+
+        if (response.ok) {
+          setIsSubmitted(true);
+          setFormData({
+            firstName: '',
+            email: '',
+            phone: '',
+            message: ''
+          });
+          setErrors({});
+        } else {
+          alert("Something went wrong. Please try again or reach out to us directly.");
+        }
+      } catch (error) {
+        console.error("Form submission error:", error);
+        alert("Unable to send message due to a network connection error. Please check your internet or reach us via WhatsApp.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -157,8 +182,8 @@ export default function Contact() {
                   {errors.message && <span className="error-text">{errors.message}</span>}
                 </div>
 
-                <button type="submit" className="btn btn-send">
-                  Send Message
+                <button type="submit" className="btn btn-send" disabled={isSubmitting}>
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             )}
