@@ -1,0 +1,564 @@
+/* -------------------------------------------------------------
+ * Diagnostics Page Styling - ReGen Care Africa
+ * ------------------------------------------------------------- */
+
+.diag-page {
+  background-color: var(--color-bg-white);
+  color: var(--color-text-muted);
+}
+
+/* 1. Hero Section */
+.diag-hero {
+  background-color: #015C91; /* Brand blue */
+  position: relative;
+  z-index: 1;
+}
+
+.diag-hero-container {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  align-items: stretch;
+  min-height: 70vh;
+}
+
+.diag-hero-content {
+  color: var(--color-text-light);
+  padding: 120px 5vw 100px 8vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.diag-hero-tag {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.diag-hero-title {
+  color: var(--color-text-light);
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  font-weight: bold;
+  line-height: 1.05;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.diag-hero-desc {
+  font-size: clamp(1.05rem, 1.25vw, 1.35rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
+  max-width: 680px;
+  margin: 0;
+}
+
+.diag-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.btn-appointment {
+  background-color: var(--color-primary-dark);
+  color: var(--color-text-light);
+  padding: 16px 40px;
+  border-radius: var(--border-radius-full);
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: var(--transition-normal);
+  border: none;
+}
+
+.btn-appointment:hover {
+  background-color: var(--color-primary);
+  transform: translateY(-3px);
+}
+
+.diag-phone-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background-color: var(--color-bg-white);
+  color: var(--color-primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-normal);
+}
+
+.diag-phone-btn:hover {
+  background-color: var(--color-bg-light);
+  transform: translateY(-3px) rotate(15deg);
+  color: var(--color-primary);
+}
+
+.diag-hero-image-col {
+  overflow: hidden;
+  position: relative;
+}
+
+.diag-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 2. Diagnostic Services Section */
+.diag-services {
+  background-color: var(--color-bg-white);
+  padding: 120px 5vw;
+}
+
+.diag-services-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+}
+
+.diag-services-header {
+  text-align: center;
+}
+
+.diag-main-title {
+  color: var(--color-primary-dark);
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-weight: bold;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.diag-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 400px;
+  gap: 40px;
+}
+
+.diag-card {
+  border-radius: 40px;
+  padding: 40px 35px;
+  color: var(--color-text-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.diag-card:hover {
+  transform: translateY(-8px);
+}
+
+.diag-card.bg-navy {
+  background-color: var(--color-primary-dark);
+}
+
+.diag-card.bg-blue {
+  background-color: var(--color-primary);
+}
+
+.diag-card-top {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.diag-card-title {
+  color: var(--color-text-light);
+  font-size: clamp(1.35rem, 1.7vw, 1.85rem);
+  font-weight: bold;
+  line-height: 1.25;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.01em;
+}
+
+.diag-card-text {
+  font-size: 0.96rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.diag-list-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.diag-bullet {
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.diag-bullet strong {
+  color: var(--color-text-light);
+  font-weight: 700;
+}
+
+/* Image Card Styling */
+.diag-image-card {
+  border-radius: 40px;
+  overflow: hidden;
+  height: 100%;
+  transition: var(--transition-normal);
+}
+
+.diag-image-card:hover {
+  transform: translateY(-8px);
+}
+
+.diag-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition-slow);
+}
+
+.diag-image-card:hover .diag-card-img {
+  transform: scale(1.06);
+}
+
+/* 3. Why Advanced Diagnostics Matter Section */
+.diag-matter {
+  position: relative;
+  background-image: linear-gradient(rgba(0, 39, 71, 0.8) 0%, rgba(0, 39, 71, 0.8) 100%), url('/assets/13/Group 72.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--color-text-light);
+  padding: 120px 5vw;
+}
+
+.diag-matter-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.diag-matter-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.diag-matter-title {
+  color: var(--color-text-light);
+  font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+  font-weight: bold;
+  line-height: 1.1;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.btn-matter-contact {
+  background-color: var(--color-accent);
+  color: var(--color-text-light);
+  padding: 16px 40px;
+  border-radius: var(--border-radius-full);
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: var(--transition-normal);
+  border: none;
+}
+
+.btn-matter-contact:hover {
+  background-color: var(--color-accent-hover);
+  transform: translateY(-3px);
+}
+
+.diag-matter-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.diag-matter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.diag-matter-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.diag-matter-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--color-bg-white);
+  color: var(--color-primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.diag-matter-text {
+  font-size: clamp(1.05rem, 1.2vw, 1.25rem);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  font-weight: 600;
+}
+
+/* 4. Split Section (Who Is It For & Why Choose ReGen Care Africa) */
+.diag-split {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+}
+
+.diag-split .split-benefits-col {
+  background-color: #f0f7fc; /* soft light blue */
+  flex: 1;
+  padding: 120px 6vw 120px 8vw;
+}
+
+.diag-split .split-whotsfor-col {
+  background-color: var(--color-primary); /* #004375 */
+  flex: 1;
+  padding: 120px 8vw 120px 6vw;
+  color: var(--color-text-light);
+}
+
+.diag-split .split-col-inner {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 45px;
+}
+
+.diag-split .split-benefits-col .split-col-inner {
+  margin-left: auto;
+}
+
+.diag-split .split-whotsfor-col .split-col-inner {
+  margin-right: auto;
+}
+
+.diag-split .split-title {
+  font-size: clamp(2.8rem, 4.5vw, 3.8rem);
+  font-weight: bold;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.diag-split .split-title.color-dark {
+  color: var(--color-primary-dark);
+}
+
+.diag-split .split-title.color-light {
+  color: var(--color-text-light);
+}
+
+.diag-split .split-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.diag-split .split-item {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 24px 0;
+}
+
+.diag-split .split-item.border-dark {
+  border-bottom: 1px dotted rgba(0, 39, 71, 0.2);
+}
+
+.diag-split .split-item.border-light {
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.2);
+}
+
+.diag-split .split-item:first-child {
+  padding-top: 0;
+}
+
+.diag-split .split-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.diag-split .split-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--color-text-light);
+  flex-shrink: 0;
+}
+
+.diag-split .split-badge.bg-navy {
+  background-color: var(--color-primary-dark); /* #002747 */
+}
+
+.diag-split .split-badge.bg-badge-light {
+  background-color: #015C91; /* Custom medium blue */
+}
+
+.diag-split .split-text {
+  font-size: clamp(1.05rem, 1.2vw, 1.25rem);
+  line-height: 1.5;
+  font-weight: 600;
+  margin: 0;
+}
+
+.diag-split .split-text.color-dark {
+  color: var(--color-primary-dark);
+}
+
+.diag-split .split-text.color-light {
+  color: var(--color-text-light);
+}
+
+/* 5. CTA Section */
+.diag-cta {
+  background-color: var(--color-primary-dark); /* #002747 */
+  padding: 140px 5vw;
+  text-align: center;
+}
+
+.diag-cta-content {
+  max-width: 1240px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+.diag-cta-title {
+  color: var(--color-text-light);
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  font-weight: bold;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.btn-cta-blue {
+  background-color: var(--color-primary); /* #004375 */
+  color: var(--color-text-light);
+  padding: 16px 40px;
+  border-radius: var(--border-radius-full);
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: var(--transition-normal);
+  border: none;
+}
+
+.btn-cta-blue:hover {
+  background-color: var(--color-primary-light);
+  transform: translateY(-3px);
+}
+
+/* 6. Responsive Media Queries */
+@media (max-width: 1024px) {
+  .diag-hero-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .diag-hero-content {
+    padding: 140px 24px 80px 24px;
+  }
+  
+  .diag-hero-image-col {
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+  
+  .diag-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 400px;
+    gap: 30px;
+  }
+  
+  .diag-matter-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .diag-split {
+    flex-direction: column;
+  }
+  
+  .diag-split .split-benefits-col,
+  .diag-split .split-whotsfor-col {
+    padding: 80px 24px;
+  }
+  
+  .diag-split .split-col-inner {
+    margin: 0 auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .diag-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    gap: 24px;
+  }
+  
+  .diag-card {
+    padding: 40px 30px;
+    border-radius: 30px;
+    height: auto;
+  }
+  
+  .diag-image-card {
+    border-radius: 30px;
+    aspect-ratio: 16 / 11;
+    height: auto;
+  }
+  
+  .diag-services {
+    padding: 80px 24px;
+  }
+  
+  .diag-matter {
+    padding: 80px 24px;
+  }
+  
+  .diag-cta {
+    padding: 100px 24px;
+  }
+  
+  .diag-split .split-item {
+    gap: 15px;
+    padding: 18px 0;
+  }
+  
+  .diag-split .split-badge {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+}

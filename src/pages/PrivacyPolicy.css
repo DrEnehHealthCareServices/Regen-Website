@@ -1,0 +1,171 @@
+/* -------------------------------------------------------------
+ * Privacy Policy Page Styling - ReGen Care Africa
+ * ------------------------------------------------------------- */
+
+.privacy-page {
+  background-color: var(--color-bg-white);
+  color: var(--color-text-dark);
+}
+
+/* 1. Hero Section */
+.privacy-hero {
+  position: relative;
+  background-image: linear-gradient(180deg, rgba(0, 39, 71, 0.85) 0%, rgba(0, 39, 71, 0.98) 100%);
+  color: var(--color-text-light);
+  padding: 160px 5vw 120px;
+  text-align: center;
+  z-index: 1;
+}
+
+.privacy-hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.privacy-hero-title {
+  color: var(--color-text-light);
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-weight: bold;
+  line-height: 1.1;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.privacy-hero-subtitle {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: clamp(1.05rem, 1.25vw, 1.35rem);
+  font-weight: 700;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.privacy-hero-desc {
+  font-size: clamp(1.1rem, 1.3vw, 1.4rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 760px;
+  margin: 10px auto 0;
+}
+
+/* 2. Main Content Section */
+.privacy-content-section {
+  background-color: var(--color-bg-white);
+  padding: 100px 5vw 140px;
+}
+
+.privacy-content-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.privacy-section-block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.privacy-section-block h2 {
+  color: var(--color-primary-dark); /* Deep Navy #002747 */
+  font-size: clamp(1.35rem, 1.8vw, 1.65rem);
+  font-weight: bold;
+  line-height: 1.25;
+  border-bottom: 2px solid var(--color-bg-light); /* Soft blue border */
+  padding-bottom: 8px;
+  margin: 0;
+}
+
+.privacy-section-block p {
+  color: var(--color-text-dark);
+  font-size: 1.15rem; /* Large, readable font-size based on user feedback */
+  line-height: 1.7;
+  margin: 0;
+}
+
+.privacy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.privacy-list li {
+  color: var(--color-text-dark);
+  font-size: 1.12rem;
+  line-height: 1.6;
+}
+
+.privacy-list li strong {
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+/* Contact Details List */
+.privacy-list.contact-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.privacy-list.contact-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.contact-icon-label {
+  color: var(--color-accent);
+  font-size: 1.35rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.privacy-link {
+  color: var(--color-primary);
+  font-weight: 700;
+  transition: color var(--transition-fast);
+}
+
+.privacy-link:hover {
+  color: var(--color-accent);
+}
+
+/* 3. Responsive Media Queries */
+@media (max-width: 1024px) {
+  .privacy-hero {
+    padding: 140px 24px 100px;
+  }
+  
+  .privacy-content-section {
+    padding: 80px 24px 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .privacy-hero {
+    padding: 120px 24px 80px;
+  }
+  
+  .privacy-content-section {
+    padding: 60px 24px 80px;
+  }
+  
+  .privacy-content-container {
+    gap: 36px;
+  }
+  
+  .privacy-section-block p {
+    font-size: 1.05rem;
+  }
+  
+  .privacy-list li {
+    font-size: 1.02rem;
+  }
+}

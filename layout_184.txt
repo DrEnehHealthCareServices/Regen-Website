@@ -1,0 +1,20 @@
+Text: "Why Our" | Box: x=0.066, y=0.739, w=0.235, h=0.112
+Text: "ca" | Box: x=0.316, y=0.738, w=0.029, h=0.032
+Text: "Treatments" | Box: x=0.064, y=0.649, w=0.303, h=0.082
+Text: "ENEW" | Box: x=0.361, y=0.659, w=0.051, h=0.032
+Text: "Are Different" | Box: x=0.062, y=0.534, w=0.350, h=0.086
+Text: "*87" | Box: x=0.203, y=0.462, w=0.016, h=0.014
+Text: "Contact Us" | Box: x=0.096, y=0.376, w=0.105, h=0.032
+Text: "1" | Box: x=0.529, y=0.792, w=0.012, h=0.032
+Text: "2" | Box: x=0.527, y=0.638, w=0.016, h=0.036
+Text: "3" | Box: x=0.527, y=0.448, w=0.016, h=0.036
+Text: "4" | Box: x=0.527, y=0.294, w=0.016, h=0.036
+Text: "Root-cause, cellular-level" | Box: x=0.572, y=0.803, w=0.248, h=0.043
+Text: "healing (not just symptom relief)" | Box: x=0.574, y=0.756, w=0.301, h=0.039
+Text: "Integrative approach combining" | Box: x=0.572, y=0.656, w=0.303, h=0.039
+Text: "regenerative medicine, diagnostics," | Box: x=0.574, y=0.606, w=0.338, h=0.043
+Text: "and nutrition" | Box: x=0.574, y=0.566, w=0.121, h=0.032
+Text: "Concierge care - delivered in-" | Box: x=0.574, y=0.462, w=0.291, h=0.043
+Text: "clinic or at home." | Box: x=0.574, y=0.423, w=0.160, h=0.032
+Text: "Programs tailored to your" | Box: x=0.574, y=0.312, w=0.240, h=0.039
+Text: "biology and lifestyle." | Box: x=0.574, y=0.262, w=0.197, h=0.043

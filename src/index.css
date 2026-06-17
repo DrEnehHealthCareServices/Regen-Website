@@ -1,0 +1,318 @@
+/* -------------------------------------------------------------
+ * Design System - ReGen Care Africa
+ * Font: Plus Jakarta Sans
+ * ------------------------------------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+:root {
+  /* Colors - Premium Blue Palette */
+  --color-primary: #004375;      /* Slate Blue */
+  --color-primary-dark: #002747; /* Deep Navy */
+  --color-primary-light: #00609c;/* Medium Blue */
+  --color-accent: #009fde;       /* Vibrant Sky/Teal */
+  --color-accent-hover: #0081b5; /* Darker Accent */
+  --color-bg-light: #f0f7fc;     /* Soft Light Blue Background */
+  --color-bg-white: #ffffff;
+  --color-text-dark: #0f2435;    /* Deep navy-slate for readability */
+  --color-text-muted: #536c84;   /* Soft slate gray for body copy */
+  --color-text-light: #ffffff;
+  
+  /* Gradients */
+  --grad-primary: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 50%, var(--color-primary-light) 100%);
+  --grad-accent: linear-gradient(135deg, #00bfff 0%, var(--color-accent) 100%);
+  --grad-hero-overlay: linear-gradient(to right, rgba(0, 39, 71, 0.92) 0%, rgba(0, 67, 117, 0.82) 40%, rgba(0, 96, 156, 0.3) 100%);
+  --grad-card-overlay: linear-gradient(to top, rgba(0, 39, 71, 0.95) 0%, rgba(0, 67, 117, 0.7) 60%, rgba(0, 96, 156, 0.1) 100%);
+  --grad-cta-overlay: linear-gradient(to right, rgba(0, 39, 71, 0.95) 0%, rgba(0, 67, 117, 0.85) 100%);
+  --grad-footer: linear-gradient(180deg, #00213d 0%, #001224 100%);
+  
+  /* Glassmorphism & Shadows */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-bg-hover: rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 75, 135, 0.15);
+  --glass-blur: blur(16px);
+  
+  --shadow-sm: 0 2px 8px rgba(0, 39, 71, 0.05);
+  --shadow-md: 0 10px 30px rgba(0, 39, 71, 0.08);
+  --shadow-lg: 0 20px 40px rgba(0, 39, 71, 0.12);
+  
+  /* Typography & Layout */
+  --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --border-radius-sm: 8px;
+  --border-radius-md: 16px;
+  --border-radius-lg: 24px;
+  --border-radius-full: 9999px;
+  
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base resets & resets override */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg-white);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition-fast);
+  outline: none;
+}
+
+a:focus, button:focus, [role="button"]:focus {
+  outline: none;
+}
+
+a:focus-visible, button:focus-visible, [role="button"]:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+/* Typography styles */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family);
+  color: var(--color-text-dark);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem); /* Responsive sizing */
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+p {
+  font-size: clamp(0.95rem, 1.1vw, 1.15rem);
+}
+
+/* Button & interactive primitives */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: var(--border-radius-full);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  border: none;
+  outline: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary-dark);
+  color: var(--color-text-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-white {
+  background-color: var(--color-bg-white);
+  color: var(--color-primary-dark);
+}
+
+.btn-white:hover {
+  background-color: var(--color-bg-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-outline-glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text-light);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.btn-outline-glass:hover {
+  background: var(--glass-bg-hover);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Section styling helpers */
+.section-padding {
+  padding: 100px 5vw;
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding: 60px 24px;
+  }
+}
+
+/* Container */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.anim-fade-up {
+  animation: fadeInUp var(--transition-slow) forwards;
+}
+
+.anim-fade {
+  animation: fadeIn var(--transition-normal) forwards;
+}
+
+/* -------------------------------------------------------------
+ * Mobile Specific Optimization & Hero Button Layout
+ * ------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Keep hero action buttons on one line on mobile, never wrap vertically */
+  .hero-actions,
+  .cellular-hero-actions,
+  .aesthetics-hero-actions,
+  .pain-hero-actions,
+  .hrt-hero-actions,
+  .peptide-hero-actions,
+  .hair-hero-actions,
+  .other-hero-actions,
+  .iv-hero-actions,
+  .diag-hero-actions,
+  .services-hero-actions,
+  .treatment-hero-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Center home hero buttons since home layout is centered on mobile */
+  .hero-actions {
+    justify-content: center !important;
+  }
+
+  /* Make the primary CTA button occupy the main space and prevent text wrapping */
+  .hero-actions .btn,
+  .cellular-hero-actions .btn,
+  .aesthetics-hero-actions .btn,
+  .pain-hero-actions .btn,
+  .hrt-hero-actions .btn,
+  .peptide-hero-actions .btn,
+  .hair-hero-actions .btn,
+  .other-hero-actions .btn,
+  .iv-hero-actions .btn,
+  .diag-hero-actions .btn,
+  .services-hero-actions .btn,
+  .treatment-hero-actions .btn {
+    flex: 1 !important;
+    padding: 12px 14px !important;
+    font-size: 0.85rem !important;
+    white-space: nowrap !important;
+    justify-content: center !important;
+    text-align: center !important;
+    min-width: 0 !important;
+  }
+
+  /* Ensure the phone circular button remains a fixed size */
+  .phone-icon-btn,
+  .cellular-phone-btn,
+  .aesthetics-phone-btn,
+  .pain-phone-btn,
+  .hrt-phone-btn,
+  .peptide-phone-btn,
+  .hair-phone-btn,
+  .other-phone-btn,
+  .iv-phone-btn,
+  .diag-phone-btn,
+  .services-phone-btn,
+  .treatment-phone-btn {
+    flex-shrink: 0 !important;
+    width: 48px !important;
+    height: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+  }
+
+  /* Hide hero split image columns on mobile for services pages and diagnostics */
+  .cellular-hero-image-col,
+  .aesthetics-hero-image-col,
+  .pain-hero-image-col,
+  .hrt-hero-image-col,
+  .peptide-hero-image-col,
+  .hair-hero-image-col,
+  .other-hero-image-col,
+  .iv-hero-image-col,
+  .diag-hero-image-col {
+    display: none !important;
+  }
+}
+

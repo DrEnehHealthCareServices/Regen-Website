@@ -1,0 +1,49 @@
+Text: "Our Key" | Box: x=0.068, y=0.834, w=0.421, h=0.106
+Text: "Treatment Areas" | Box: x=0.061, y=0.763, w=0.873, h=0.082
+Text: "Autoimmune &" | Box: x=0.086, y=0.687, w=0.229, h=0.041
+Text: "Immune Health" | Box: x=0.086, y=0.664, w=0.225, h=0.024
+Text: "ReGenCar" | Box: x=0.148, y=0.620, w=0.053, h=0.011
+Text: "Africa" | Box: x=0.186, y=0.613, w=0.029, h=0.009
+Text: "Neurology &" | Box: x=0.381, y=0.686, w=0.186, h=0.036
+Text: "Brain Health" | Box: x=0.381, y=0.664, w=0.178, h=0.024
+Text: "ReGenCare V" | Box: x=0.395, y=0.629, w=0.072, h=0.014
+Text: "Africa a" | Box: x=0.428, y=0.622, w=0.031, h=0.009
+Text: "Orthopedic &" | Box: x=0.672, y=0.688, w=0.203, h=0.028
+Text: "Musculoskeletal" | Box: x=0.672, y=0.664, w=0.242, h=0.024
+Text: "Autoimmune Conditions" | Box: x=0.098, y=0.510, w=0.184, h=0.012
+Text: "Immunotherapy Supports" | Box: x=0.098, y=0.474, w=0.193, h=0.016
+Text: "Lupus" | Box: x=0.100, y=0.437, w=0.047, h=0.016
+Text: "Neurodegenerative Conditions" | Box: x=0.391, y=0.544, w=0.232, h=0.014
+Text: "Multiple Sclerosis" | Box: x=0.389, y=0.507, w=0.133, h=0.016
+Text: "Autism" | Box: x=0.545, y=0.509, w=0.055, h=0.014
+Text: "Traumatic Brain Injury (TBI)" | Box: x=0.387, y=0.472, w=0.197, h=0.017
+Text: "Post-Stroke Management" | Box: x=0.391, y=0.439, w=0.197, h=0.016
+Text: "Spine & Disc Conditions" | Box: x=0.680, y=0.603, w=0.182, h=0.017
+Text: "/ Back Pain" | Box: x=0.678, y=0.587, w=0.086, h=0.016
+Text: "Osteoarthritis" | Box: x=0.680, y=0.559, w=0.107, h=0.014
+Text: "Rheumatoid Arthritis" | Box: x=0.680, y=0.524, w=0.154, h=0.016
+Text: "Sports Injuries" | Box: x=0.678, y=0.490, w=0.109, h=0.016
+Text: "Orthopedic & Spinal" | Box: x=0.682, y=0.453, w=0.154, h=0.016
+Text: "Cord Injuries" | Box: x=0.684, y=0.439, w=0.094, h=0.016
+Text: "Men's" | Box: x=0.090, y=0.352, w=0.092, h=0.028
+Text: "Health" | Box: x=0.088, y=0.324, w=0.100, h=0.024
+Text: "Chronic &" | Box: x=0.379, y=0.347, w=0.150, h=0.035
+Text: "Metabolic" | Box: x=0.379, y=0.323, w=0.153, h=0.030
+Text: "Conditions" | Box: x=0.379, y=0.296, w=0.166, h=0.024
+Text: "ReGenCare" | Box: x=0.649, y=0.322, w=0.085, h=0.023
+Text: "Africa" | Box: x=0.705, y=0.315, w=0.029, h=0.010
+Text: "CHRONIC & METABOLIC CONOMONS" | Box: x=0.650, y=0.293, w=0.115, h=0.010
+Text: "REGENERATE REVITALICE. AGNIN" | Box: x=0.662, y=0.279, w=0.097, h=0.014
+Text: "ReGenCare" | Box: x=0.215, y=0.265, w=0.062, h=0.010
+Text: "Africa'" | Box: x=0.252, y=0.256, w=0.027, h=0.010
+Text: "REGENERATE: REVITALIZE, RENEW." | Box: x=0.209, y=0.236, w=0.106, h=0.014
+Text: "Erectile Dysfunction" | Box: x=0.098, y=0.141, w=0.154, h=0.016
+Text: "Hormonal & Vitality Support" | Box: x=0.098, y=0.106, w=0.209, h=0.017
+Text: "Diabetic Complications" | Box: x=0.391, y=0.226, w=0.178, h=0.014
+Text: "Weight Management" | Box: x=0.387, y=0.190, w=0.162, h=0.016
+Text: "Metabolic Dysfunction" | Box: x=0.389, y=0.155, w=0.172, h=0.017
+Text: "COPD (Chronic Obstructive" | Box: x=0.391, y=0.122, w=0.209, h=0.014
+Text: "Pulmonary Disease)" | Box: x=0.391, y=0.105, w=0.150, h=0.016
+Text: "Science-Driven" | Box: x=0.676, y=0.145, w=0.217, h=0.023
+Text: "Care For Every" | Box: x=0.676, y=0.111, w=0.201, h=0.028
+Text: "Stage Of Life." | Box: x=0.674, y=0.081, w=0.194, h=0.029
