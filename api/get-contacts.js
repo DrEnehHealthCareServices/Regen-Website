@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
-    return res.status(500).json({ message: 'GitHub token (GITHUB_TOKEN) not configured on Vercel environment.' });
+    return res.status(500).json({ message: 'GitHub token (GITHUB_TOKEN) not configured on server environment.' });
   }
 
   const gitRepo = 'DrEnehHealthCareServices/Regen-Website';

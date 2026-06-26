@@ -359,7 +359,7 @@ export default function BlogAdmin() {
       setPosts(updatedPosts);
       setCurrentPost(prev => ({ ...prev, id: savedPost.id }));
       
-      showStatus('Published successfully! Vercel build has been triggered. Live in 1-2 mins.', 'success');
+      showStatus('Published successfully! The changes will go live in 1-2 minutes.', 'success');
     } catch (err) {
       console.error(err);
       showStatus(`Publish error: ${err.message}`, 'error');
@@ -767,7 +767,7 @@ export default function BlogAdmin() {
       }
 
       setContactMessages(updatedMessages);
-      showStatus('Message deleted successfully! Vercel build triggered.', 'success');
+      showStatus('Message deleted successfully! The changes will be updated in 1-2 minutes.', 'success');
     } catch (err) {
       console.error(err);
       showStatus(`Delete error: ${err.message}`, 'error');
