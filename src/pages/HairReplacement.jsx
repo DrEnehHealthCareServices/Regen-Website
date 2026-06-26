@@ -27,7 +27,7 @@ export default function HairReplacement() {
           <div className="hair-hero-content anim-fade-up">
             <span className="hair-hero-tag">SAY GOODBYE TO HAIR LOSS AND HELLO TO A FULLER, HEALTHIER YOU.</span>
             <h1 className="hair-hero-title">
-              Hair Replacement<br />Therapy
+              Hair Replacement <br />Therapy
             </h1>
             <p className="hair-hero-desc">
               At ReGen Care Africa, we use advanced cellular and regenerative hair therapies to combat

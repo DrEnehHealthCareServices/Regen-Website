@@ -101,7 +101,7 @@ export default function Services() {
       <section className="services-hero">
         <div className="services-hero-content anim-fade-up">
           <h1 className="services-hero-title">
-            Our Services:<br />Science, Care &<br />Personalization
+            Our Services: <br />Science, Care & <br />Personalization
           </h1>
           <p className="services-hero-desc">
             At ReGen Care Africa, we offer an extensive range of regenerative, functional, and

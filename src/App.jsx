@@ -36,7 +36,10 @@ function SEOManager() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const meta = routeMeta[pathname] || routeMeta['/'];
+    
+    // Normalize path to handle trailing slashes
+    const cleanPath = pathname.endsWith('/') && pathname !== '/' ? pathname.slice(0, -1) : pathname;
+    const meta = routeMeta[cleanPath] || routeMeta['/'];
     if (meta) {
       // 1. Update Title
       document.title = meta.title;

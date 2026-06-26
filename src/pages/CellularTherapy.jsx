@@ -89,7 +89,7 @@ export default function CellularTherapy() {
           <div className="cellular-hero-content anim-fade-up">
             <span className="cellular-hero-tag">RESTORE. REPAIR. REGENERATE.</span>
             <h1 className="cellular-hero-title">
-              Cellular Therapy<br />Healing At The Source
+              Cellular Therapy <br />Healing At The Source
             </h1>
             <p className="cellular-hero-desc">
               Harness your body's natural healing power through advanced cellular therapies

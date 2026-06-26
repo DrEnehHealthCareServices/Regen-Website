@@ -29,7 +29,7 @@ export default function PainManagement() {
           <div className="pain-hero-content anim-fade-up">
             <span className="pain-hero-tag">DON'T JUST MANAGE PAIN — TREAT ITS ROOT CAUSE.</span>
             <h1 className="pain-hero-title">
-              Pain Management –<br />Restore Movement,<br />Relieve Pain, Regain Life
+              Pain Management – <br />Restore Movement, <br />Relieve Pain, Regain Life
             </h1>
             <p className="pain-hero-desc">
               At ReGen Care Africa, we go beyond temporary relief. Using cellular therapies,

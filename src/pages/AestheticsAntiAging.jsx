@@ -30,7 +30,7 @@ export default function AestheticsAntiAging() {
           <div className="aesthetics-hero-content anim-fade-up">
             <span className="aesthetics-hero-tag">LOOK YOUNGER. FEEL CONFIDENT. AGE GRACEFULLY.</span>
             <h1 className="aesthetics-hero-title">
-              Aesthetics & Anti-Aging<br />Therapy – Redefine Beauty,<br />Restore Confidence
+              Aesthetics & Anti-Aging <br />Therapy – Redefine Beauty, <br />Restore Confidence
             </h1>
             <p className="aesthetics-hero-desc">
               At ReGen Care Africa, our Aesthetic & Anti-Aging Programs combine cutting-edge

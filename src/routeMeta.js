@@ -35,11 +35,7 @@ const baseSchema = {
     ],
     'opens': '08:00',
     'closes': '17:00'
-  },
-  'sameAs': [
-    'https://linkedin.com',
-    'https://facebook.com'
-  ]
+  }
 };
 
 export const routeMeta = {

@@ -28,7 +28,7 @@ export default function PeptideSenolytics() {
           <div className="peptide-hero-content anim-fade-up">
             <span className="peptide-hero-tag">CUTTING-EDGE THERAPIES FOR LONGEVITY, VITALITY, AND REGENERATION.</span>
             <h1 className="peptide-hero-title">
-              Peptide Therapy<br />& Senolytics
+              Peptide Therapy <br /> & Senolytics
             </h1>
             <p className="peptide-hero-desc">
               At ReGen Care Africa, our Peptide & Senolytic Therapies harness the body's natural

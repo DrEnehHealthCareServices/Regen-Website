@@ -20,7 +20,7 @@ export default function HormonalReplacement() {
           <div className="hrt-hero-content anim-fade-up">
             <span className="hrt-hero-tag">DON'T LET HORMONAL IMBALANCE CONTROL YOUR LIFE — TAKE CHARGE NATURALLY.</span>
             <h1 className="hrt-hero-title">
-              Hormonal Replacement<br />Therapy (HRT)
+              Hormonal Replacement <br />Therapy (HRT)
             </h1>
             <p className="hrt-hero-desc">
               At ReGen Care Africa, our personalized Hormonal Replacement Therapy programs

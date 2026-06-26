@@ -75,7 +75,8 @@ export default function Footer() {
           <Link to="/privacy-policy" className="footer-policy-link">Privacy Policies</Link>
         </div>
 
-        {/* Social Icons */}
+        {/* Social Icons (Temporarily disabled to prevent placeholder links from leaking into SEO scans) */}
+        {/*
         <div className="footer-socials">
           <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-icon-btn" aria-label="LinkedIn">
             <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -90,6 +91,7 @@ export default function Footer() {
             </svg>
           </a>
         </div>
+        */}
       </div>
     </footer>
   );

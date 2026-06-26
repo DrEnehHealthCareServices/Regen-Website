@@ -33,7 +33,7 @@ export default function Diagnostics() {
           <div className="diag-hero-content anim-fade-up">
             <span className="diag-hero-tag">KNOW YOUR BODY. PREDICT. PREVENT. PERFORM.</span>
             <h1 className="diag-hero-title">
-              The Future Of Health Begins<br />With The Right Diagnosis.
+              The Future Of Health Begins <br />With The Right Diagnosis.
             </h1>
             <p className="diag-hero-desc">
               At ReGen Care Africa, we believe in precision medicine. Our advanced diagnostics go

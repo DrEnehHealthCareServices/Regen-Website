@@ -77,7 +77,7 @@ export default function About() {
             <div className="science-pills">
               {sciencePills.map((pill, idx) => (
                 <span key={idx} className="science-pill">
-                  <img src="/assets/2/Group 35.png" alt="" className="science-pill-icon" />
+                  <img src="/assets/2/Group 35.png" alt="Cellular science check icon" className="science-pill-icon" />
                   {pill}
                 </span>
               ))}
@@ -123,7 +123,7 @@ export default function About() {
         <div className="wwd-header">
           <div className="wwd-header-title-row-1">
             What
-            <img className="heading-inline-img" src="/assets/2/Group 9.png" alt="" />
+            <img className="heading-inline-img" src="/assets/2/Group 9.png" alt="Decorative brand element" />
           </div>
           <div className="wwd-header-title-row-2">
             We Do
