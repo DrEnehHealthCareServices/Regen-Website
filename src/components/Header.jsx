@@ -53,6 +53,9 @@ export default function Header() {
           <NavLink to="/treatment" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
             Treatment
           </NavLink>
+          <NavLink to="/blog" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+            Blog
+          </NavLink>
         </nav>
 
         {/* Center Logo */}
@@ -102,6 +105,9 @@ export default function Header() {
         </NavLink>
         <NavLink to="/treatment" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           Treatment
+        </NavLink>
+        <NavLink to="/blog" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+          Blog
         </NavLink>
         
         {/* Mobile Dropdown Toggler */}

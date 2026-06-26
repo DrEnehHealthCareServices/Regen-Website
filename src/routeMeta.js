@@ -1,6 +1,8 @@
 // SEO Metadata Configuration for ReGen Care Africa
 // Includes titles, descriptions, canonical URLs, Open Graph parameters, and Schema.org structured data.
 
+import blogPosts from './data/blogPosts.json' with { type: 'json' };
+
 const SITE_URL = 'https://regencareafrica.com';
 
 const baseSchema = {
@@ -252,5 +254,56 @@ export const routeMeta = {
       'name': 'Privacy Policy',
       'isPartOf': { '@id': `${SITE_URL}/#website` }
     }
+  },
+  '/blog': {
+    title: 'Health & Regenerative Medicine Blog | ReGen Care Africa',
+    description: 'Stay updated with the latest research, wellness insights, and clinical guides on stem cell therapy, anti-aging, longevity, and aesthetics from ReGen Care Africa.',
+    canonical: `${SITE_URL}/blog`,
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'Blog',
+      '@id': `${SITE_URL}/blog/#blog`,
+      'url': `${SITE_URL}/blog`,
+      'name': 'ReGen Care Africa Blog',
+      'description': 'Stay updated with the latest research and guides on stem cell therapy, anti-aging, longevity, and aesthetics.',
+      'publisher': { '@id': `${SITE_URL}/#clinic` }
+    }
+  },
+  '/blog-admin': {
+    title: 'Blog Portal | ReGen Care Africa',
+    description: 'Administrative interface for writing and auditing blog posts for ReGen Care Africa.',
+    canonical: `${SITE_URL}/blog-admin`,
+    schema: null
   }
 };
+
+// Append blog posts dynamically for pre-rendering SEO pages
+blogPosts.forEach(post => {
+  routeMeta[`/blog/${post.slug}`] = {
+    title: `${post.title} | ReGen Care Africa Blog`,
+    description: post.summary,
+    canonical: `${SITE_URL}/blog/${post.slug}`,
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      '@id': `${SITE_URL}/blog/${post.slug}/#post`,
+      'headline': post.title,
+      'description': post.summary,
+      'datePublished': post.date,
+      'author': {
+        '@type': 'Person',
+        'name': post.author
+      },
+      'publisher': {
+        '@type': 'Organization',
+        'name': 'ReGen Care Africa',
+        'logo': {
+          '@type': 'ImageObject',
+          'url': `${SITE_URL}/assets/1/Group%20of%204%20Objects.png`
+        }
+      },
+      'mainEntityOfPage': `${SITE_URL}/blog/${post.slug}`,
+      'image': `${SITE_URL}${post.image}`
+    }
+  };
+});

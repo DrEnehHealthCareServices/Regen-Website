@@ -17,6 +17,9 @@ import Diagnostics from './pages/Diagnostics';
 import Contact from './pages/Contact';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import PlaceholderPage from './pages/PlaceholderPage';
+import BlogList from './pages/BlogList';
+import BlogArticle from './pages/BlogArticle';
+import BlogAdmin from './pages/BlogAdmin';
 import { routeMeta } from './routeMeta';
 
 // ScrollToTop helper to ensure page resets scroll on routing
@@ -93,6 +96,11 @@ export function AppRoutes() {
         <Route path="/diagnostics" element={<Diagnostics />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        
+        {/* Blog Routes */}
+        <Route path="/blog" element={<BlogList />} />
+        <Route path="/blog/:slug" element={<BlogArticle />} />
+        <Route path="/blog-admin" element={<BlogAdmin />} />
         
         {/* Fallback route */}
         <Route path="*" element={<PlaceholderPage title="404 Not Found" />} />
