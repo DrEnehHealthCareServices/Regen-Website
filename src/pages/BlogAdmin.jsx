@@ -1125,16 +1125,24 @@ export default function BlogAdmin() {
               </div>
 
               <div className="deployment-instructions">
-                <h4>GitHub Deployment Guide</h4>
-                <ol>
-                  <li>Complete writing your post and verify it has an **SEO Score above 80**.</li>
-                  <li>Click **"Save Draft locally"** to store your current changes in the browser.</li>
-                  <li>Click the **"Download Database"** button in the header. This generates a file named `blogPosts.json`.</li>
-                  <li>In your file system, replace the existing database file:
-                      <br /><code className="code-path">src/data/blogPosts.json</code>
-                  </li>
-                  <li>Commit and push the code changes to GitHub. The static site will pre-render your new page automatically!</li>
-                </ol>
+                {gitToken ? (
+                  <>
+                    <h4>Automatic Publishing Active</h4>
+                    <p style={{ fontSize: '0.85rem', lineHeight: '1.5', margin: '0' }}>
+                      Everything is configured! Simply click <strong>"Publish to GitHub"</strong> in the top header to go live.
+                      <br /><br />
+                      GitHub will automatically build and deploy your site. Please wait <strong>2 minutes</strong> for your new post to appear live on the blog.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h4>GitHub Deployment Guide</h4>
+                    <ol>
+                      <li>Enter your credentials in the settings panel below to enable one-click publishing.</li>
+                      <li>Once active, click <strong>"Publish to GitHub"</strong> to deploy. Or manually download and replace the JSON file in the repository.</li>
+                    </ol>
+                  </>
+                )}
               </div>
 
               <div className="github-settings-widget">
