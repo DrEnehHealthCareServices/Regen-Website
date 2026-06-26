@@ -82,6 +82,8 @@ export default function BlogArticle() {
     html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="article-content-link" target="_blank" rel="noopener noreferrer">$1</a>');
     // Replace bold: **text**
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Replace italic: *text*
+    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
     return html;
   };
 

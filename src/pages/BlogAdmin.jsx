@@ -12,6 +12,7 @@ const parseInlineElements = (text, images = {}) => {
   });
   html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="article-content-link" target="_blank" rel="noopener noreferrer">$1</a>');
   html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
   return html;
 };
 
@@ -363,6 +364,24 @@ export default function BlogAdmin() {
       textarea.focus();
       textarea.setSelectionRange(start + before.length, start + before.length + selection.length);
     }, 0);
+  };
+
+  const handleKeyDown = (e) => {
+    const isMac = typeof navigator !== 'undefined' && navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    const modifier = isMac ? e.metaKey : e.ctrlKey;
+    
+    if (modifier) {
+      if (e.key === 'b' || e.key === 'B') {
+        e.preventDefault();
+        insertMarkdown('**', '**');
+      } else if (e.key === 'i' || e.key === 'I') {
+        e.preventDefault();
+        insertMarkdown('*', '*');
+      } else if (e.key === 'u' || e.key === 'U') {
+        e.preventDefault();
+        insertMarkdown('<u>', '</u>');
+      }
+    }
   };
 
   const insertLinkPrompt = () => {
@@ -800,11 +819,9 @@ export default function BlogAdmin() {
               onClick={handlePublishToGitHub}
               disabled={isPublishing}
             >
-              {isPublishing ? 'Publishing...' : 'Publish to GitHub'}
+              {isPublishing ? 'Publishing...' : 'Publish Article'}
             </button>
             <button className="btn-admin-nav" onClick={handleCreateNew}>New Post</button>
-            <button className="btn-admin-nav outline" onClick={handleDownloadJson}>Download Database</button>
-            <button className="btn-admin-nav outline" onClick={handleCopyJson}>Copy Database JSON</button>
           </div>
         </header>
 
@@ -1031,13 +1048,15 @@ export default function BlogAdmin() {
                 </div>
                 
                 <div className="editor-toolbar">
-                  <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('**', '**')} title="Bold Selection">Bold</button>
+                  <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('**', '**')} title="Bold Selection (Ctrl+B / Cmd+B)">Bold</button>
+                  <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('*', '*')} title="Italic Selection (Ctrl+I / Cmd+I)">Italic</button>
+                  <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('<u>', '</u>')} title="Underline Selection (Ctrl+U / Cmd+U)">Underline</button>
                   <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('## ', '')} title="Heading 2">H2</button>
                   <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('### ', '')} title="Heading 3">H3</button>
                   <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('- ', '')} title="List Item">List</button>
                   <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('> ', '')} title="Blockquote">Quote</button>
                   <button type="button" className="toolbar-btn" onClick={insertLinkPrompt} title="Insert Link">Add Link</button>
-                   <button type="button" className="toolbar-btn" onClick={insertImagePrompt} title="Insert Content Image">Add Image</button>
+                  <button type="button" className="toolbar-btn" onClick={insertImagePrompt} title="Insert Content Image">Add Image</button>
                   <input 
                     type="file" 
                     id="body-file-input" 
@@ -1053,6 +1072,7 @@ export default function BlogAdmin() {
                     name="content"
                     value={currentPost.content}
                     onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
                     rows="15"
                     placeholder="Write your article here. Use '### Heading' for sections, '**text**' for bold, and '-' for lists..."
                     className={isDragOverTextarea ? 'drag-over' : ''}
@@ -1160,6 +1180,14 @@ export default function BlogAdmin() {
             )}
           </section>
         )}
+
+        <details className="developer-tools-details" style={{ marginTop: '40px', borderTop: '1px solid rgba(0,67,117,0.08)', paddingTop: '20px' }}>
+          <summary style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', cursor: 'pointer', fontWeight: 600 }}>🛠️ Developer Utilities</summary>
+          <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
+            <button className="btn-admin-nav outline" onClick={handleDownloadJson} style={{ fontSize: '0.8rem', padding: '8px 16px' }}>Download Database JSON</button>
+            <button className="btn-admin-nav outline" onClick={handleCopyJson} style={{ fontSize: '0.8rem', padding: '8px 16px' }}>Copy Database JSON</button>
+          </div>
+        </details>
       </div>
     </div>
   );
