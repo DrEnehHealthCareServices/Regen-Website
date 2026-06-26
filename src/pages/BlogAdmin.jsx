@@ -139,6 +139,26 @@ export default function BlogAdmin() {
   const [isPublishing, setIsPublishing] = useState(false);
   const [contactMessages, setContactMessages] = useState([]);
   const [isDeletingMessage, setIsDeletingMessage] = useState(false);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+
+  const fetchContactMessages = async (silent = false) => {
+    if (!silent) setIsLoadingMessages(true);
+    try {
+      const response = await fetch('/api/get-contacts');
+      if (response.ok) {
+        const data = await response.json();
+        setContactMessages(data);
+      } else {
+        console.warn('Fallback to staticMessages due to non-ok response.');
+        setContactMessages(staticMessages);
+      }
+    } catch (err) {
+      console.error('Error loading live contact messages:', err);
+      setContactMessages(staticMessages);
+    } finally {
+      if (!silent) setIsLoadingMessages(false);
+    }
+  };
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -433,6 +453,7 @@ export default function BlogAdmin() {
     if (staticMessages) {
       setContactMessages(staticMessages);
     }
+    fetchContactMessages(true);
   }, []);
 
   // Run SEO Audit whenever currentPost changes
@@ -882,7 +903,10 @@ export default function BlogAdmin() {
           </button>
           <button 
             className={`admin-tab ${activeTab === 'messages' ? 'active' : ''}`}
-            onClick={() => setActiveTab('messages')}
+            onClick={() => {
+              setActiveTab('messages');
+              fetchContactMessages(true);
+            }}
           >
             Contact Messages ({contactMessages.length})
           </button>
@@ -1231,8 +1255,39 @@ export default function BlogAdmin() {
         {/* TAB 3: CONTACT MESSAGES */}
         {activeTab === 'messages' && (
           <section className="admin-list-section">
-            <h2 style={{ marginBottom: '24px', color: 'var(--color-primary-dark)', fontWeight: 800 }}>Received Contact Submissions</h2>
-            {contactMessages.length === 0 ? (
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <h2 style={{ margin: 0, color: 'var(--color-primary-dark)', fontWeight: 800 }}>Received Contact Submissions</h2>
+              <button 
+                onClick={() => fetchContactMessages(false)} 
+                disabled={isLoadingMessages}
+                className="btn-admin-nav outline"
+                style={{ fontSize: '0.85rem', padding: '8px 16px' }}
+              >
+                {isLoadingMessages ? 'Refreshing...' : '🔄 Refresh Messages'}
+              </button>
+            </div>
+            
+            {isLoadingMessages ? (
+              <div className="empty-list" style={{ padding: '60px 0' }}>
+                <div className="loading-spinner" style={{
+                  border: '4px solid rgba(0,67,117,0.1)',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  borderLeftColor: 'var(--color-primary)',
+                  animation: 'spin 1s linear infinite',
+                  margin: '0 auto 16px auto'
+                }}></div>
+                <style>{`
+                  @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                  }
+                `}</style>
+                <h3>Loading messages...</h3>
+                <p>Connecting to the secure database endpoint.</p>
+              </div>
+            ) : contactMessages.length === 0 ? (
               <div className="empty-list">
                 <h3>No messages received</h3>
                 <p>All contact form submissions will be listed here.</p>
