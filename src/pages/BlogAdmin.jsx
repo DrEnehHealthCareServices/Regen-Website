@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import staticPosts from '../data/blogPosts.json';
+import staticMessages from '../data/contactMessages.json';
 import './BlogAdmin.css';
 
 const parseInlineElements = (text, images = {}) => {
@@ -136,6 +137,8 @@ export default function BlogAdmin() {
   const [isDragOverTextarea, setIsDragOverTextarea] = useState(false);
 
   const [isPublishing, setIsPublishing] = useState(false);
+  const [contactMessages, setContactMessages] = useState([]);
+  const [isDeletingMessage, setIsDeletingMessage] = useState(false);
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -426,6 +429,10 @@ export default function BlogAdmin() {
     } else {
       setPosts(staticPosts);
     }
+
+    if (staticMessages) {
+      setContactMessages(staticMessages);
+    }
   }, []);
 
   // Run SEO Audit whenever currentPost changes
@@ -714,6 +721,40 @@ export default function BlogAdmin() {
     }
   };
 
+  const handleDeleteMessage = async (msgId) => {
+    if (!window.confirm("Are you sure you want to delete this contact message?")) return;
+
+    setIsDeletingMessage(true);
+    showStatus('Deleting message...', 'success');
+
+    try {
+      const updatedMessages = contactMessages.filter(m => m.id !== msgId);
+      
+      const response = await fetch('/api/publish-contacts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          messages: updatedMessages
+        })
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText || 'Failed to update contact database on server.');
+      }
+
+      setContactMessages(updatedMessages);
+      showStatus('Message deleted successfully! Vercel build triggered.', 'success');
+    } catch (err) {
+      console.error(err);
+      showStatus(`Delete error: ${err.message}`, 'error');
+    } finally {
+      setIsDeletingMessage(false);
+    }
+  };
+
   const showStatus = (text, type) => {
     setStatusMsg({ text, type });
     setTimeout(() => setStatusMsg({ text: '', type: '' }), 5000);
@@ -838,6 +879,12 @@ export default function BlogAdmin() {
             onClick={() => setActiveTab('list')}
           >
             Article List ({posts.length})
+          </button>
+          <button 
+            className={`admin-tab ${activeTab === 'messages' ? 'active' : ''}`}
+            onClick={() => setActiveTab('messages')}
+          >
+            Contact Messages ({contactMessages.length})
           </button>
         </nav>
 
@@ -1174,6 +1221,70 @@ export default function BlogAdmin() {
                       <button className="btn-row-action" onClick={() => handleEditSelect(post)}>Edit</button>
                       <button className="btn-row-action delete" onClick={() => handleDeletePost(post.slug)}>Delete</button>
                     </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* TAB 3: CONTACT MESSAGES */}
+        {activeTab === 'messages' && (
+          <section className="admin-list-section">
+            <h2 style={{ marginBottom: '24px', color: 'var(--color-primary-dark)', fontWeight: 800 }}>Received Contact Submissions</h2>
+            {contactMessages.length === 0 ? (
+              <div className="empty-list">
+                <h3>No messages received</h3>
+                <p>All contact form submissions will be listed here.</p>
+              </div>
+            ) : (
+              <div className="admin-messages-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {contactMessages.map((msg, idx) => (
+                  <div key={idx} className="admin-message-card" style={{
+                    backgroundColor: 'var(--color-bg-white)',
+                    padding: '24px',
+                    borderRadius: 'var(--border-radius-md)',
+                    border: '1px solid rgba(0,67,117,0.06)',
+                    boxShadow: 'var(--shadow-sm)',
+                    position: 'relative'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                      <div>
+                        <h3 style={{ margin: 0, fontSize: '1.15rem', color: 'var(--color-primary-dark)' }}>{msg.firstName}</h3>
+                        <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+                          Email: <a href={`mailto:${msg.email}`} style={{ color: 'var(--color-accent-hover)', textDecoration: 'underline' }}>{msg.email}</a> | Phone: <a href={`tel:${msg.phone}`} style={{ color: 'var(--color-accent-hover)', textDecoration: 'underline' }}>{msg.phone}</a>
+                        </p>
+                      </div>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
+                        {new Date(msg.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
+                    <div style={{
+                      backgroundColor: '#f8fafc',
+                      padding: '16px',
+                      borderRadius: 'var(--border-radius-sm)',
+                      fontSize: '0.95rem',
+                      lineHeight: '1.5',
+                      color: 'var(--color-text-dark)',
+                      whiteSpace: 'pre-wrap',
+                      marginBottom: '40px'
+                    }}>
+                      {msg.message}
+                    </div>
+                    <button 
+                      onClick={() => handleDeleteMessage(msg.id)} 
+                      disabled={isDeletingMessage}
+                      className="btn-row-action delete" 
+                      style={{
+                        position: 'absolute',
+                        right: '24px',
+                        bottom: '24px',
+                        fontSize: '0.8rem',
+                        padding: '6px 12px'
+                      }}
+                    >
+                      Delete Message
+                    </button>
                   </div>
                 ))}
               </div>

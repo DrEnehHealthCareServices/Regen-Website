@@ -56,7 +56,7 @@ export default function Contact() {
     } else {
       setIsSubmitting(true);
       try {
-        const response = await fetch("https://formsubmit.co/ajax/info@regencareafrica.com", {
+        const formSubmitPromise = fetch("https://formsubmit.co/ajax/info@regencareafrica.com", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -69,6 +69,21 @@ export default function Contact() {
             Message: formData.message
           })
         });
+
+        const localApiPromise = fetch("/api/submit-contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            firstName: formData.firstName,
+            email: formData.email,
+            phone: formData.phone,
+            message: formData.message
+          })
+        });
+
+        const [response] = await Promise.all([formSubmitPromise, localApiPromise]);
 
         if (response.ok) {
           setIsSubmitted(true);
