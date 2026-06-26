@@ -48,7 +48,6 @@ export default function BlogList() {
       <section className="blog-hero">
         <div className="blog-hero-container">
           <div className="blog-hero-content anim-fade-up">
-            <span className="blog-hero-tag">REGEN HEALTH INSIGHTS & SCIENCE</span>
             <h1 className="blog-hero-title">
               Empowering Longevity <br />Through Scientific Research
             </h1>
