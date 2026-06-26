@@ -70,11 +70,14 @@ export default function BlogArticle() {
   }
 
   // Helper to parse inline markdown elements (images, links, bold)
-  const parseInlineElements = (text) => {
+  const parseInlineElements = (text, images = {}) => {
     if (!text) return '';
     let html = text;
-    // Replace inline images: ![alt](url)
-    html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="article-content-img" />');
+    // Replace inline images: ![alt](key)
+    html = html.replace(/!\[(.*?)\]\((.*?)\)/g, (match, alt, key) => {
+      const src = images[key] || key;
+      return `<img src="${src}" alt="${alt}" class="article-content-img" />`;
+    });
     // Replace links: [text](url)
     html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="article-content-link" target="_blank" rel="noopener noreferrer">$1</a>');
     // Replace bold: **text**
@@ -83,7 +86,7 @@ export default function BlogArticle() {
   };
 
   // Helper to parse simple markdown markers
-  const renderContent = (text) => {
+  const renderContent = (text, images = {}) => {
     if (!text) return null;
     const lines = text.split('\n');
     let insideList = false;
@@ -114,24 +117,24 @@ export default function BlogArticle() {
       } else if (trimmed.startsWith('>')) {
         flushList(idx);
         const quoteText = trimmed.replace(/^>\s*/, '');
-        const htmlContent = parseInlineElements(quoteText);
+        const htmlContent = parseInlineElements(quoteText, images);
         elements.push(<blockquote key={idx} className="article-blockquote" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
       } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
         insideList = true;
         const itemText = trimmed.slice(2);
-        const htmlContent = parseInlineElements(itemText);
+        const htmlContent = parseInlineElements(itemText, images);
         listItems.push(<li key={`li-${idx}`} className="article-li" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
       } else if (trimmed.match(/^\d+\.\s/)) {
         insideList = true;
         const itemText = trimmed.replace(/^\d+\.\s/, '');
-        const htmlContent = parseInlineElements(itemText);
+        const htmlContent = parseInlineElements(itemText, images);
         listItems.push(<li key={`li-${idx}`} className="article-ol-li" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
       } else if (trimmed === '') {
         flushList(idx);
         elements.push(<div key={`spacing-${idx}`} className="article-paragraph-spacing" />);
       } else {
         flushList(idx);
-        const htmlContent = parseInlineElements(trimmed);
+        const htmlContent = parseInlineElements(trimmed, images);
         elements.push(<p key={idx} className="article-p" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
       }
     });
@@ -188,7 +191,7 @@ export default function BlogArticle() {
         <div className="article-grid">
           {/* Main Body Column */}
           <main className="article-body">
-            {renderContent(post.content)}
+            {renderContent(post.content, post.images)}
 
             {/* Backlinks / Reference Section */}
             {post.backlinks && post.backlinks.length > 0 && (

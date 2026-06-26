@@ -2,16 +2,20 @@ import { useState, useEffect } from 'react';
 import staticPosts from '../data/blogPosts.json';
 import './BlogAdmin.css';
 
-const parseInlineElements = (text) => {
+const parseInlineElements = (text, images = {}) => {
   if (!text) return '';
   let html = text;
-  html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="article-content-img" />');
+  // Replace inline images: ![alt](key)
+  html = html.replace(/!\[(.*?)\]\((.*?)\)/g, (match, alt, key) => {
+    const src = images[key] || key;
+    return `<img src="${src}" alt="${alt}" class="article-content-img" />`;
+  });
   html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="article-content-link" target="_blank" rel="noopener noreferrer">$1</a>');
   html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   return html;
 };
 
-const renderPreviewContent = (text) => {
+const renderPreviewContent = (text, images = {}) => {
   if (!text) return null;
   const lines = text.split('\n');
   let insideList = false;
@@ -42,24 +46,24 @@ const renderPreviewContent = (text) => {
     } else if (trimmed.startsWith('>')) {
       flushList(idx);
       const quoteText = trimmed.replace(/^>\s*/, '');
-      const htmlContent = parseInlineElements(quoteText);
+      const htmlContent = parseInlineElements(quoteText, images);
       elements.push(<blockquote key={idx} className="article-blockquote" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
     } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
       insideList = true;
       const itemText = trimmed.slice(2);
-      const htmlContent = parseInlineElements(itemText);
+      const htmlContent = parseInlineElements(itemText, images);
       listItems.push(<li key={`li-${idx}`} className="article-li" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
     } else if (trimmed.match(/^\d+\.\s/)) {
       insideList = true;
       const itemText = trimmed.replace(/^\d+\.\s/, '');
-      const htmlContent = parseInlineElements(itemText);
+      const htmlContent = parseInlineElements(itemText, images);
       listItems.push(<li key={`li-${idx}`} className="article-ol-li" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
     } else if (trimmed === '') {
       flushList(idx);
       elements.push(<div key={`spacing-${idx}`} className="article-paragraph-spacing" />);
     } else {
       flushList(idx);
-      const htmlContent = parseInlineElements(trimmed);
+      const htmlContent = parseInlineElements(trimmed, images);
       elements.push(<p key={idx} className="article-p" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
     }
   });
@@ -116,6 +120,7 @@ export default function BlogAdmin() {
     date: new Date().toISOString().split('T')[0],
     readTime: '5 min read',
     image: '/assets/5/Cellular Therapy.png',
+    images: {},
     metaDescription: '',
     keywords: '',
     backlinks: '[{"text": "Cellular Therapy Services", "url": "/services/cellular-therapy"}]'
@@ -212,7 +217,15 @@ export default function BlogAdmin() {
       try {
         showStatus('Compressing dropped image...', 'success');
         const compressed = await compressImage(file, 700);
-        insertMarkdown(`![Dropped Image](${compressed})`, '');
+        const imageKey = `image_${Object.keys(currentPost.images || {}).length + 1}`;
+        setCurrentPost(prev => ({
+          ...prev,
+          images: {
+            ...prev.images,
+            [imageKey]: compressed
+          }
+        }));
+        insertMarkdown(`![Dropped Image](${imageKey})`, '');
         showStatus('Dropped image compressed and inserted!', 'success');
       } catch (err) {
         showStatus('Error processing dropped image.', 'error');
@@ -227,7 +240,15 @@ export default function BlogAdmin() {
       try {
         showStatus('Compressing body image...', 'success');
         const compressed = await compressImage(file, 700);
-        insertMarkdown(`![Uploaded Image](${compressed})`, '');
+        const imageKey = `image_${Object.keys(currentPost.images || {}).length + 1}`;
+        setCurrentPost(prev => ({
+          ...prev,
+          images: {
+            ...prev.images,
+            [imageKey]: compressed
+          }
+        }));
+        insertMarkdown(`![Uploaded Image](${imageKey})`, '');
         showStatus('Image compressed and inserted!', 'success');
       } catch (err) {
         showStatus('Error processing body image.', 'error');
@@ -289,6 +310,7 @@ export default function BlogAdmin() {
         date: p.date,
         readTime: p.readTime,
         image: p.image,
+        images: p.images || {},
         metaDescription: p.metaDescription || '',
         keywords: Array.isArray(p.keywords) ? p.keywords : String(p.keywords).split(',').map(k => k.trim()),
         backlinks: typeof p.backlinks === 'string' ? JSON.parse(p.backlinks) : p.backlinks
@@ -656,6 +678,7 @@ export default function BlogAdmin() {
       date: post.date,
       readTime: post.readTime,
       image: post.image,
+      images: post.images || {},
       metaDescription: post.metaDescription || '',
       keywords: Array.isArray(post.keywords) ? post.keywords.join(', ') : post.keywords || '',
       backlinks: JSON.stringify(post.backlinks || [])
@@ -675,6 +698,7 @@ export default function BlogAdmin() {
       date: new Date().toISOString().split('T')[0],
       readTime: '1 min read',
       image: '/assets/5/Cellular Therapy.png',
+      images: {},
       metaDescription: '',
       keywords: '',
       backlinks: '[{"text": "Cellular Therapy Services", "url": "/services/cellular-therapy"}]'
@@ -727,6 +751,7 @@ export default function BlogAdmin() {
       date: p.date,
       readTime: p.readTime,
       image: p.image,
+      images: p.images || {},
       metaDescription: p.metaDescription,
       keywords: Array.isArray(p.keywords) ? p.keywords : String(p.keywords).split(',').map(k => k.trim()),
       backlinks: typeof p.backlinks === 'string' ? JSON.parse(p.backlinks) : p.backlinks
@@ -750,6 +775,7 @@ export default function BlogAdmin() {
       date: p.date,
       readTime: p.readTime,
       image: p.image,
+      images: p.images || {},
       metaDescription: p.metaDescription,
       keywords: Array.isArray(p.keywords) ? p.keywords : String(p.keywords).split(',').map(k => k.trim()),
       backlinks: typeof p.backlinks === 'string' ? JSON.parse(p.backlinks) : p.backlinks
@@ -1084,7 +1110,7 @@ export default function BlogAdmin() {
                       <hr style={{ margin: '15px 0', opacity: 0.15 }} />
                       <div className="rendered-preview-content">
                         {currentPost.content ? (
-                          renderPreviewContent(currentPost.content)
+                          renderPreviewContent(currentPost.content, currentPost.images)
                         ) : (
                           <p style={{color: '#999', fontStyle: 'italic'}}>Start typing to see live rendering...</p>
                         )}
@@ -1146,30 +1172,33 @@ export default function BlogAdmin() {
                 )}
               </div>
 
-              <div className="github-settings-widget">
-                <h4>GitHub Auto-Deploy Settings</h4>
-                <p className="settings-help">
-                  To publish posts instantly, GitHub requires a Personal Access Token (PAT) to verify you have permission to update this site. It is saved securely in your browser's local storage.
-                </p>
-                <div className="form-group">
-                  <label htmlFor="git-token">GitHub Access Token</label>
-                  <input 
-                    type="password" 
-                    id="git-token" 
-                    value={gitToken} 
-                    onChange={(e) => {
-                      setGitToken(e.target.value);
-                      localStorage.setItem('regen_git_token', e.target.value);
-                    }}
-                    placeholder="Paste your token (ghp_...)"
-                  />
+              <details className="github-settings-details">
+                <summary className="github-settings-summary">⚙️ Developer Settings</summary>
+                <div className="github-settings-widget">
+                  <h4>GitHub Auto-Deploy Settings</h4>
+                  <p className="settings-help">
+                    To publish posts instantly, GitHub requires a Personal Access Token (PAT) to verify you have permission to update this site. It is saved securely in your browser's local storage.
+                  </p>
+                  <div className="form-group">
+                    <label htmlFor="git-token">GitHub Access Token</label>
+                    <input 
+                      type="password" 
+                      id="git-token" 
+                      value={gitToken} 
+                      onChange={(e) => {
+                        setGitToken(e.target.value);
+                        localStorage.setItem('regen_git_token', e.target.value);
+                      }}
+                      placeholder="Paste your token (ghp_...)"
+                    />
+                  </div>
+                  {gitToken ? (
+                    <p className="settings-active-status">✨ One-click publishing active!</p>
+                  ) : (
+                    <p className="settings-inactive-status">Enter your token to activate publishing.</p>
+                  )}
                 </div>
-                {gitToken ? (
-                  <p className="settings-active-status">✨ One-click publishing active!</p>
-                ) : (
-                  <p className="settings-inactive-status">Enter your token to activate publishing.</p>
-                )}
-              </div>
+              </details>
             </aside>
           </div>
         )}

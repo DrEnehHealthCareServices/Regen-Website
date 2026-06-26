@@ -921,3 +921,47 @@
   border-radius: var(--border-radius-sm);
   text-align: center;
 }
+
+/* -------------------------------------------------------------
+ * Collapsible Settings Details
+ * ------------------------------------------------------------- */
+.github-settings-details {
+  margin-top: 20px;
+}
+
+.github-settings-summary {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  cursor: pointer;
+  padding: 12px 18px;
+  background-color: #f1f5f9;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(0, 67, 117, 0.08);
+  transition: var(--transition-fast);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.github-settings-summary::-webkit-details-marker {
+  display: none;
+}
+
+.github-settings-summary:hover {
+  background-color: #e2e8f0;
+  border-color: rgba(0, 67, 117, 0.15);
+}
+
+.github-settings-details[open] .github-settings-summary {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.github-settings-details[open] .github-settings-widget {
+  margin-top: 0;
+  border-top: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
