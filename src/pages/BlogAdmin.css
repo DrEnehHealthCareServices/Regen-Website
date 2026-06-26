@@ -911,3 +911,13 @@
   border-radius: var(--border-radius-sm);
   text-align: center;
 }
+
+.settings-inactive-status {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #664d03;
+  background-color: #fff9e6;
+  padding: 6px 12px;
+  border-radius: var(--border-radius-sm);
+  text-align: center;
+}

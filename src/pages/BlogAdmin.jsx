@@ -100,6 +100,9 @@ const compressImage = (file, maxWidth) => {
   });
 };
 
+const GIT_REPO = 'DrEnehHealthCareServices/Regen-Website';
+const GIT_BRANCH = 'main';
+
 export default function BlogAdmin() {
   const [posts, setPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState({
@@ -127,8 +130,6 @@ export default function BlogAdmin() {
   const [isDragOverTextarea, setIsDragOverTextarea] = useState(false);
 
   const [gitToken, setGitToken] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('regen_git_token') || '' : ''));
-  const [gitRepo, setGitRepo] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('regen_git_repo') || 'DrEnehHealthCareServices/Regen-Website' : 'DrEnehHealthCareServices/Regen-Website'));
-  const [gitBranch, setGitBranch] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('regen_git_branch') || 'main' : 'main'));
   const [isPublishing, setIsPublishing] = useState(false);
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -294,11 +295,11 @@ export default function BlogAdmin() {
       }));
 
       const filePath = 'src/data/blogPosts.json';
-      const url = `https://api.github.com/repos/${gitRepo}/contents/${filePath}`;
+      const url = `https://api.github.com/repos/${GIT_REPO}/contents/${filePath}`;
 
       // 2. Fetch current file metadata (sha) from GitHub
       showStatus('Fetching database version from GitHub...', 'success');
-      const getRes = await fetch(`${url}?ref=${gitBranch}`, {
+      const getRes = await fetch(`${url}?ref=${GIT_BRANCH}`, {
         headers: {
           'Authorization': `token ${gitToken}`,
           'Accept': 'application/vnd.github.v3+json'
@@ -321,7 +322,7 @@ export default function BlogAdmin() {
       const putBody = {
         message: `content: publish blog article "${savedPost.title}" via Admin Portal`,
         content: base64Content,
-        branch: gitBranch
+        branch: GIT_BRANCH
       };
       if (sha) {
         putBody.sha = sha;
@@ -1147,35 +1148,11 @@ export default function BlogAdmin() {
 
               <div className="github-settings-widget">
                 <h4>GitHub Auto-Deploy Settings</h4>
-                <p className="settings-help">Enter your GitHub credentials to enable one-click publishing directly from this dashboard. Saved securely in your browser's local storage.</p>
+                <p className="settings-help">
+                  To publish posts instantly, GitHub requires a Personal Access Token (PAT) to verify you have permission to update this site. It is saved securely in your browser's local storage.
+                </p>
                 <div className="form-group">
-                  <label htmlFor="git-repo">Repository (owner/name)</label>
-                  <input 
-                    type="text" 
-                    id="git-repo" 
-                    value={gitRepo} 
-                    onChange={(e) => {
-                      setGitRepo(e.target.value);
-                      localStorage.setItem('regen_git_repo', e.target.value);
-                    }}
-                    placeholder="e.g. owner/repo"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="git-branch">Branch</label>
-                  <input 
-                    type="text" 
-                    id="git-branch" 
-                    value={gitBranch} 
-                    onChange={(e) => {
-                      setGitBranch(e.target.value);
-                      localStorage.setItem('regen_git_branch', e.target.value);
-                    }}
-                    placeholder="main"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="git-token">Personal Access Token (PAT)</label>
+                  <label htmlFor="git-token">GitHub Access Token</label>
                   <input 
                     type="password" 
                     id="git-token" 
@@ -1184,11 +1161,13 @@ export default function BlogAdmin() {
                       setGitToken(e.target.value);
                       localStorage.setItem('regen_git_token', e.target.value);
                     }}
-                    placeholder="ghp_xxxxxxxxxxxx"
+                    placeholder="Paste your token (ghp_...)"
                   />
                 </div>
-                {gitToken && (
+                {gitToken ? (
                   <p className="settings-active-status">✨ One-click publishing active!</p>
+                ) : (
+                  <p className="settings-inactive-status">Enter your token to activate publishing.</p>
                 )}
               </div>
             </aside>
