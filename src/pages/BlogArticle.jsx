@@ -69,6 +69,19 @@ export default function BlogArticle() {
     );
   }
 
+  // Helper to parse inline markdown elements (images, links, bold)
+  const parseInlineElements = (text) => {
+    if (!text) return '';
+    let html = text;
+    // Replace inline images: ![alt](url)
+    html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="article-content-img" />');
+    // Replace links: [text](url)
+    html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="article-content-link" target="_blank" rel="noopener noreferrer">$1</a>');
+    // Replace bold: **text**
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    return html;
+  };
+
   // Helper to parse simple markdown markers
   const renderContent = (text) => {
     if (!text) return null;
@@ -98,26 +111,27 @@ export default function BlogArticle() {
         const textVal = trimmed.replace('## ', '');
         const id = textVal.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
         elements.push(<h2 key={idx} id={id} className="article-h2">{textVal}</h2>);
+      } else if (trimmed.startsWith('>')) {
+        flushList(idx);
+        const quoteText = trimmed.replace(/^>\s*/, '');
+        const htmlContent = parseInlineElements(quoteText);
+        elements.push(<blockquote key={idx} className="article-blockquote" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
       } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
         insideList = true;
-        let itemText = trimmed.slice(2);
-        const boldRegex = /\*\*(.*?)\*\*/g;
-        itemText = itemText.replace(boldRegex, '<strong>$1</strong>');
-        listItems.push(<li key={`li-${idx}`} className="article-li" dangerouslySetInnerHTML={{ __html: itemText }} />);
+        const itemText = trimmed.slice(2);
+        const htmlContent = parseInlineElements(itemText);
+        listItems.push(<li key={`li-${idx}`} className="article-li" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
       } else if (trimmed.match(/^\d+\.\s/)) {
         insideList = true;
-        let itemText = trimmed.replace(/^\d+\.\s/, '');
-        const boldRegex = /\*\*(.*?)\*\*/g;
-        itemText = itemText.replace(boldRegex, '<strong>$1</strong>');
-        listItems.push(<li key={`li-${idx}`} className="article-ol-li" dangerouslySetInnerHTML={{ __html: itemText }} />);
+        const itemText = trimmed.replace(/^\d+\.\s/, '');
+        const htmlContent = parseInlineElements(itemText);
+        listItems.push(<li key={`li-${idx}`} className="article-ol-li" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
       } else if (trimmed === '') {
         flushList(idx);
         elements.push(<div key={`spacing-${idx}`} className="article-paragraph-spacing" />);
       } else {
         flushList(idx);
-        let htmlContent = trimmed;
-        const boldRegex = /\*\*(.*?)\*\*/g;
-        htmlContent = htmlContent.replace(boldRegex, '<strong>$1</strong>');
+        const htmlContent = parseInlineElements(trimmed);
         elements.push(<p key={idx} className="article-p" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
       }
     });

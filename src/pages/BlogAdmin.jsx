@@ -2,6 +2,72 @@ import { useState, useEffect } from 'react';
 import staticPosts from '../data/blogPosts.json';
 import './BlogAdmin.css';
 
+const parseInlineElements = (text) => {
+  if (!text) return '';
+  let html = text;
+  html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="article-content-img" />');
+  html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="article-content-link" target="_blank" rel="noopener noreferrer">$1</a>');
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  return html;
+};
+
+const renderPreviewContent = (text) => {
+  if (!text) return null;
+  const lines = text.split('\n');
+  let insideList = false;
+  let listItems = [];
+  const elements = [];
+
+  const flushList = (key) => {
+    if (listItems.length > 0) {
+      elements.push(<ul key={`list-${key}`} className="article-ul">{listItems}</ul>);
+      listItems = [];
+      insideList = false;
+    }
+  };
+
+  lines.forEach((line, idx) => {
+    const trimmed = line.trim();
+    
+    if (trimmed.startsWith('### ')) {
+      flushList(idx);
+      const textVal = trimmed.replace('### ', '');
+      const id = textVal.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+      elements.push(<h3 key={idx} id={id} className="article-h3">{textVal}</h3>);
+    } else if (trimmed.startsWith('## ')) {
+      flushList(idx);
+      const textVal = trimmed.replace('## ', '');
+      const id = textVal.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+      elements.push(<h2 key={idx} id={id} className="article-h2">{textVal}</h2>);
+    } else if (trimmed.startsWith('>')) {
+      flushList(idx);
+      const quoteText = trimmed.replace(/^>\s*/, '');
+      const htmlContent = parseInlineElements(quoteText);
+      elements.push(<blockquote key={idx} className="article-blockquote" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
+    } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+      insideList = true;
+      const itemText = trimmed.slice(2);
+      const htmlContent = parseInlineElements(itemText);
+      listItems.push(<li key={`li-${idx}`} className="article-li" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
+    } else if (trimmed.match(/^\d+\.\s/)) {
+      insideList = true;
+      const itemText = trimmed.replace(/^\d+\.\s/, '');
+      const htmlContent = parseInlineElements(itemText);
+      listItems.push(<li key={`li-${idx}`} className="article-ol-li" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
+    } else if (trimmed === '') {
+      flushList(idx);
+      elements.push(<div key={`spacing-${idx}`} className="article-paragraph-spacing" />);
+    } else {
+      flushList(idx);
+      const htmlContent = parseInlineElements(trimmed);
+      elements.push(<p key={idx} className="article-p" dangerouslySetInnerHTML={{ __html: htmlContent }} />);
+    }
+  });
+
+  flushList(lines.length);
+  return elements;
+};
+
 export default function BlogAdmin() {
   const [posts, setPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState({
@@ -24,6 +90,60 @@ export default function BlogAdmin() {
   const [previewMode, setPreviewMode] = useState(false); // side-by-side or form
   const [seoReport, setSeoReport] = useState({ score: 0, rules: [] });
   const [statusMsg, setStatusMsg] = useState({ text: '', type: '' });
+
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return sessionStorage.getItem('regen_admin_auth') === 'true';
+  });
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    if (password === 'ReGenCare@2026') {
+      setIsAuthenticated(true);
+      sessionStorage.setItem('regen_admin_auth', 'true');
+    } else {
+      setPasswordError('Incorrect password. Please try again.');
+    }
+  };
+
+  const insertMarkdown = (before, after = '') => {
+    const textarea = document.getElementById('content');
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    const selection = text.substring(start, end);
+    
+    const replacement = before + selection + after;
+    const newValue = text.substring(0, start) + replacement + text.substring(end);
+    
+    setCurrentPost(prev => ({ ...prev, content: newValue }));
+    
+    // Reset cursor position
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + before.length, start + before.length + selection.length);
+    }, 0);
+  };
+
+  const insertLinkPrompt = () => {
+    const text = window.prompt("Enter link text:", "Reference link");
+    if (text === null) return;
+    const url = window.prompt("Enter link URL:", "https://");
+    if (url === null) return;
+    insertMarkdown(`[${text}](${url})`, '');
+  };
+
+  const insertImagePrompt = () => {
+    const alt = window.prompt("Enter image description (alt text):", "Image description");
+    if (alt === null) return;
+    const url = window.prompt("Enter image URL:", "/assets/5/Cellular Therapy.png");
+    if (url === null) return;
+    insertMarkdown(`![${alt}](${url})`, '');
+  };
 
   // Load merged database on mount
   useEffect(() => {
@@ -390,6 +510,33 @@ export default function BlogAdmin() {
     showStatus('blogPosts.json downloaded successfully!', 'success');
   };
 
+  if (!isAuthenticated) {
+    return (
+      <div className="blog-admin-page flex-center">
+        <div className="admin-login-card">
+          <div className="login-logo">
+            <img src="/assets/1/Group of 4 Objects.png" alt="ReGen Care Africa Logo" />
+          </div>
+          <h2>Admin Authentication</h2>
+          <p>Please enter the administrative password to access the blog management dashboard.</p>
+          <form onSubmit={handleLoginSubmit}>
+            <div className="form-group">
+              <input 
+                type="password" 
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            {passwordError && <p className="login-error">{passwordError}</p>}
+            <button type="submit" className="btn-login">Login to Dashboard</button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="blog-admin-page">
       <div className="admin-container">
@@ -502,19 +649,34 @@ export default function BlogAdmin() {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="image">Cover Image Link</label>
-                  <select 
-                    id="image" 
-                    name="image"
-                    value={currentPost.image}
-                    onChange={handleInputChange}
-                  >
-                    <option value="/assets/5/Cellular Therapy.png">Cellular Therapy (Stem cells background)</option>
-                    <option value="/assets/5/Mask group-1.png">Consultation Room background</option>
-                    <option value="/assets/4/Services.png">Services Grid background</option>
-                    <option value="/assets/12/IV Drip Therapy.png">IV Drip Therapy background</option>
-                    <option value="/assets/13/Diagnostics.png">Diagnostics background</option>
-                  </select>
+                  <label htmlFor="image">Cover Image URL</label>
+                  <div className="image-input-row">
+                    <input 
+                      type="text" 
+                      id="image" 
+                      name="image"
+                      value={currentPost.image}
+                      onChange={handleInputChange}
+                      placeholder="e.g. /assets/5/Cellular Therapy.png or https://url.com/image.jpg"
+                      required
+                    />
+                    <select 
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          setCurrentPost(prev => ({ ...prev, image: e.target.value }));
+                        }
+                      }}
+                      className="preset-select"
+                      defaultValue=""
+                    >
+                      <option value="" disabled>Presets...</option>
+                      <option value="/assets/5/Cellular Therapy.png">Cellular Therapy (Stem cells background)</option>
+                      <option value="/assets/5/Mask group-1.png">Consultation Room background</option>
+                      <option value="/assets/4/Services.png">Services Grid background</option>
+                      <option value="/assets/12/IV Drip Therapy.png">IV Drip Therapy background</option>
+                      <option value="/assets/13/Diagnostics.png">Diagnostics background</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
@@ -580,6 +742,16 @@ export default function BlogAdmin() {
                   </button>
                 </div>
                 
+                <div className="editor-toolbar">
+                  <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('**', '**')} title="Bold Selection">Bold</button>
+                  <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('## ', '')} title="Heading 2">H2</button>
+                  <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('### ', '')} title="Heading 3">H3</button>
+                  <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('- ', '')} title="List Item">List</button>
+                  <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('> ', '')} title="Blockquote">Quote</button>
+                  <button type="button" className="toolbar-btn" onClick={insertLinkPrompt} title="Insert Link">Add Link</button>
+                  <button type="button" className="toolbar-btn" onClick={insertImagePrompt} title="Insert Content Image">Add Image</button>
+                </div>
+                
                 <div className={`editor-content-container ${previewMode ? 'split' : ''}`}>
                   <textarea 
                     id="content" 
@@ -600,15 +772,7 @@ export default function BlogAdmin() {
                       <hr style={{ margin: '15px 0', opacity: 0.15 }} />
                       <div className="rendered-preview-content">
                         {currentPost.content ? (
-                          currentPost.content.split('\n').map((line, idx) => {
-                            if (line.trim().startsWith('### ')) return <h3 key={idx}>{line.trim().replace('### ', '')}</h3>;
-                            if (line.trim().startsWith('## ')) return <h2 key={idx}>{line.trim().replace('## ', '')}</h2>;
-                            if (line.trim().startsWith('- ')) return <li key={idx} style={{marginLeft: '15px'}}>{line.trim().slice(2)}</li>;
-                            if (line.trim() === '') return <div key={idx} style={{height: '10px'}} />;
-                            let html = line;
-                            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                            return <p key={idx} dangerouslySetInnerHTML={{__html: html}} />;
-                          })
+                          renderPreviewContent(currentPost.content)
                         ) : (
                           <p style={{color: '#999', fontStyle: 'italic'}}>Start typing to see live rendering...</p>
                         )}
