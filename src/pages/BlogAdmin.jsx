@@ -68,6 +68,38 @@ const renderPreviewContent = (text) => {
   return elements;
 };
 
+const compressImage = (file, maxWidth) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      const img = new Image();
+      img.src = e.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        resolve(compressedDataUrl);
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
+};
+
 export default function BlogAdmin() {
   const [posts, setPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState({
@@ -91,6 +123,14 @@ export default function BlogAdmin() {
   const [seoReport, setSeoReport] = useState({ score: 0, rules: [] });
   const [statusMsg, setStatusMsg] = useState({ text: '', type: '' });
 
+  const [isDragOverCover, setIsDragOverCover] = useState(false);
+  const [isDragOverTextarea, setIsDragOverTextarea] = useState(false);
+
+  const [gitToken, setGitToken] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('regen_git_token') || '' : ''));
+  const [gitRepo, setGitRepo] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('regen_git_repo') || 'DrEnehHealthCareServices/Regen-Website' : 'DrEnehHealthCareServices/Regen-Website'));
+  const [gitBranch, setGitBranch] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('regen_git_branch') || 'main' : 'main'));
+  const [isPublishing, setIsPublishing] = useState(false);
+
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     if (typeof window === 'undefined') return false;
     return sessionStorage.getItem('regen_admin_auth') === 'true';
@@ -105,6 +145,216 @@ export default function BlogAdmin() {
       sessionStorage.setItem('regen_admin_auth', 'true');
     } else {
       setPasswordError('Incorrect password. Please try again.');
+    }
+  };
+
+  // Cover Image upload handlers
+  const handleCoverDragOver = (e) => {
+    e.preventDefault();
+    setIsDragOverCover(true);
+  };
+
+  const handleCoverDragLeave = () => {
+    setIsDragOverCover(false);
+  };
+
+  const handleCoverDrop = async (e) => {
+    e.preventDefault();
+    setIsDragOverCover(false);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      try {
+        showStatus('Compressing cover image...', 'success');
+        const compressed = await compressImage(file, 800);
+        setCurrentPost(prev => ({ ...prev, image: compressed }));
+        showStatus('Cover image uploaded and compressed!', 'success');
+      } catch (err) {
+        showStatus('Error processing cover image.', 'error');
+      }
+    }
+  };
+
+  const triggerCoverFileInput = () => {
+    const fileInput = document.getElementById('cover-file-input');
+    if (fileInput) fileInput.click();
+  };
+
+  const handleCoverFileSelect = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        showStatus('Compressing cover image...', 'success');
+        const compressed = await compressImage(file, 800);
+        setCurrentPost(prev => ({ ...prev, image: compressed }));
+        showStatus('Cover image uploaded and compressed!', 'success');
+      } catch (err) {
+        showStatus('Error processing cover image.', 'error');
+      }
+    }
+  };
+
+  // Textarea drag-and-drop handlers for body images
+  const handleTextareaDragOver = (e) => {
+    e.preventDefault();
+    setIsDragOverTextarea(true);
+  };
+
+  const handleTextareaDragLeave = () => {
+    setIsDragOverTextarea(false);
+  };
+
+  const handleTextareaDrop = async (e) => {
+    e.preventDefault();
+    setIsDragOverTextarea(false);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      try {
+        showStatus('Compressing dropped image...', 'success');
+        const compressed = await compressImage(file, 700);
+        insertMarkdown(`![Dropped Image](${compressed})`, '');
+        showStatus('Dropped image compressed and inserted!', 'success');
+      } catch (err) {
+        showStatus('Error processing dropped image.', 'error');
+      }
+    }
+  };
+
+  // Body Image upload handler (Toolbar)
+  const handleBodyFileSelect = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        showStatus('Compressing body image...', 'success');
+        const compressed = await compressImage(file, 700);
+        insertMarkdown(`![Uploaded Image](${compressed})`, '');
+        showStatus('Image compressed and inserted!', 'success');
+      } catch (err) {
+        showStatus('Error processing body image.', 'error');
+      }
+    }
+  };
+
+  const handlePublishToGitHub = async () => {
+    if (!gitToken) {
+      showStatus('Please configure your GitHub Personal Access Token in the settings below first.', 'error');
+      return;
+    }
+
+    if (!currentPost.title || !currentPost.slug || !currentPost.content) {
+      showStatus('Please fill in the title, slug, and content fields first.', 'error');
+      return;
+    }
+
+    setIsPublishing(true);
+    showStatus('Connecting to GitHub...', 'success');
+
+    try {
+      // 1. Format the current post data
+      let parsedBacklinks = [];
+      try {
+        parsedBacklinks = JSON.parse(currentPost.backlinks);
+      } catch(e) {
+        showStatus('Invalid Backlinks JSON format. Please format as: [{"text": "Name", "url": "/url"}]', 'error');
+        setIsPublishing(false);
+        return;
+      }
+
+      const savedPost = {
+        ...currentPost,
+        id: currentPost.id || Date.now(),
+        keywords: currentPost.keywords.split(',').map(k => k.trim()).filter(k => k.length > 0),
+        backlinks: parsedBacklinks
+      };
+
+      // Create new posts list (merging current state posts with this new one)
+      let updatedPosts = [...posts];
+      const existingIdx = updatedPosts.findIndex(p => p.slug === savedPost.slug);
+      if (existingIdx >= 0) {
+        updatedPosts[existingIdx] = savedPost;
+      } else {
+        updatedPosts.push(savedPost);
+      }
+      updatedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      // Clean and format before writing
+      const formattedPosts = updatedPosts.map((p, idx) => ({
+        id: typeof p.id === 'number' ? p.id : idx + 1,
+        slug: p.slug,
+        title: p.title,
+        summary: p.summary,
+        content: p.content,
+        category: p.category,
+        author: p.author,
+        date: p.date,
+        readTime: p.readTime,
+        image: p.image,
+        metaDescription: p.metaDescription || '',
+        keywords: Array.isArray(p.keywords) ? p.keywords : String(p.keywords).split(',').map(k => k.trim()),
+        backlinks: typeof p.backlinks === 'string' ? JSON.parse(p.backlinks) : p.backlinks
+      }));
+
+      const filePath = 'src/data/blogPosts.json';
+      const url = `https://api.github.com/repos/${gitRepo}/contents/${filePath}`;
+
+      // 2. Fetch current file metadata (sha) from GitHub
+      showStatus('Fetching database version from GitHub...', 'success');
+      const getRes = await fetch(`${url}?ref=${gitBranch}`, {
+        headers: {
+          'Authorization': `token ${gitToken}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+
+      let sha = null;
+      if (getRes.status === 200) {
+        const fileData = await getRes.json();
+        sha = fileData.sha;
+      } else if (getRes.status !== 404) {
+        throw new Error(`Failed to fetch file metadata from GitHub. Status: ${getRes.status}`);
+      }
+
+      // 3. Commit new content to GitHub
+      showStatus('Uploading database update to GitHub...', 'success');
+      const fileContentString = JSON.stringify(formattedPosts, null, 2);
+      const base64Content = btoa(unescape(encodeURIComponent(fileContentString)));
+
+      const putBody = {
+        message: `content: publish blog article "${savedPost.title}" via Admin Portal`,
+        content: base64Content,
+        branch: gitBranch
+      };
+      if (sha) {
+        putBody.sha = sha;
+      }
+
+      const putRes = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${gitToken}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify(putBody)
+      });
+
+      if (putRes.status === 200 || putRes.status === 201) {
+        // Update local state and save to local storage as well
+        localStorage.setItem('regen_blog_posts', JSON.stringify(
+          updatedPosts.filter(p => p.id !== 'static' && typeof p.id !== 'string')
+        ));
+        setPosts(updatedPosts);
+        setCurrentPost(prev => ({ ...prev, id: savedPost.id }));
+        
+        showStatus('Published successfully! GitHub Actions deployment has started. Live in 1-2 mins.', 'success');
+      } else {
+        const errorData = await putRes.json();
+        throw new Error(errorData.message || 'Failed to update file on GitHub.');
+      }
+    } catch (err) {
+      console.error(err);
+      showStatus(`Publish error: ${err.message}`, 'error');
+    } finally {
+      setIsPublishing(false);
     }
   };
 
@@ -138,11 +388,17 @@ export default function BlogAdmin() {
   };
 
   const insertImagePrompt = () => {
-    const alt = window.prompt("Enter image description (alt text):", "Image description");
-    if (alt === null) return;
-    const url = window.prompt("Enter image URL:", "/assets/5/Cellular Therapy.png");
-    if (url === null) return;
-    insertMarkdown(`![${alt}](${url})`, '');
+    const uploadOption = window.confirm("Do you want to upload an image from your device? (Click OK to upload, Cancel to enter an image URL)");
+    if (uploadOption) {
+      const fileInput = document.getElementById('body-file-input');
+      if (fileInput) fileInput.click();
+    } else {
+      const url = window.prompt("Enter image URL:", "/assets/5/Cellular Therapy.png");
+      if (url === null) return;
+      const alt = window.prompt("Enter image description (alt text):", "Image description");
+      if (alt === null) return;
+      insertMarkdown(`![${alt}](${url})`, '');
+    }
   };
 
   // Load merged database on mount
@@ -549,6 +805,15 @@ export default function BlogAdmin() {
           </div>
           
           <div className="admin-actions">
+            {gitToken && (
+              <button 
+                className="btn-admin-nav publish-git" 
+                onClick={handlePublishToGitHub}
+                disabled={isPublishing}
+              >
+                {isPublishing ? 'Publishing...' : 'Publish to GitHub'}
+              </button>
+            )}
             <button className="btn-admin-nav" onClick={handleCreateNew}>New Post</button>
             <button className="btn-admin-nav outline" onClick={handleDownloadJson}>Download Database</button>
             <button className="btn-admin-nav outline" onClick={handleCopyJson}>Copy Database JSON</button>
@@ -648,34 +913,69 @@ export default function BlogAdmin() {
                     onChange={handleInputChange}
                   />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="image">Cover Image URL</label>
-                  <div className="image-input-row">
-                    <input 
-                      type="text" 
-                      id="image" 
-                      name="image"
-                      value={currentPost.image}
-                      onChange={handleInputChange}
-                      placeholder="e.g. /assets/5/Cellular Therapy.png or https://url.com/image.jpg"
-                      required
-                    />
-                    <select 
-                      onChange={(e) => {
-                        if (e.target.value) {
-                          setCurrentPost(prev => ({ ...prev, image: e.target.value }));
-                        }
-                      }}
-                      className="preset-select"
-                      defaultValue=""
+                 <div className="form-group">
+                  <label>Cover Image (Upload or select preset)</label>
+                  <div className="cover-image-upload-wrapper">
+                    <div 
+                      className={`cover-image-dropzone ${isDragOverCover ? 'dragover' : ''}`}
+                      onDragOver={handleCoverDragOver}
+                      onDragLeave={handleCoverDragLeave}
+                      onDrop={handleCoverDrop}
+                      onClick={triggerCoverFileInput}
                     >
-                      <option value="" disabled>Presets...</option>
-                      <option value="/assets/5/Cellular Therapy.png">Cellular Therapy (Stem cells background)</option>
-                      <option value="/assets/5/Mask group-1.png">Consultation Room background</option>
-                      <option value="/assets/4/Services.png">Services Grid background</option>
-                      <option value="/assets/12/IV Drip Therapy.png">IV Drip Therapy background</option>
-                      <option value="/assets/13/Diagnostics.png">Diagnostics background</option>
-                    </select>
+                      {currentPost.image ? (
+                        <div className="dropzone-preview">
+                          <img src={currentPost.image} alt="Cover Preview" />
+                          <div className="dropzone-overlay">
+                            <span>Drag new image or click to upload</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="dropzone-placeholder">
+                          <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" strokeWidth="2" fill="none">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                          </svg>
+                          <p>Drag & drop cover image here, or <span>browse</span></p>
+                        </div>
+                      )}
+                      <input 
+                        type="file" 
+                        id="cover-file-input" 
+                        style={{ display: 'none' }} 
+                        accept="image/*"
+                        onChange={handleCoverFileSelect}
+                      />
+                    </div>
+                    
+                    <div className="image-input-row">
+                      <input 
+                        type="text" 
+                        id="image" 
+                        name="image"
+                        value={currentPost.image}
+                        onChange={handleInputChange}
+                        placeholder="Or paste image URL directly..."
+                        required
+                      />
+                      <select 
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            setCurrentPost(prev => ({ ...prev, image: e.target.value }));
+                          }
+                        }}
+                        className="preset-select"
+                        defaultValue=""
+                      >
+                        <option value="" disabled>Presets...</option>
+                        <option value="/assets/5/Cellular Therapy.png">Cellular Therapy (Stem cells background)</option>
+                        <option value="/assets/5/Mask group-1.png">Consultation Room background</option>
+                        <option value="/assets/4/Services.png">Services Grid background</option>
+                        <option value="/assets/12/IV Drip Therapy.png">IV Drip Therapy background</option>
+                        <option value="/assets/13/Diagnostics.png">Diagnostics background</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -749,7 +1049,14 @@ export default function BlogAdmin() {
                   <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('- ', '')} title="List Item">List</button>
                   <button type="button" className="toolbar-btn" onClick={() => insertMarkdown('> ', '')} title="Blockquote">Quote</button>
                   <button type="button" className="toolbar-btn" onClick={insertLinkPrompt} title="Insert Link">Add Link</button>
-                  <button type="button" className="toolbar-btn" onClick={insertImagePrompt} title="Insert Content Image">Add Image</button>
+                   <button type="button" className="toolbar-btn" onClick={insertImagePrompt} title="Insert Content Image">Add Image</button>
+                  <input 
+                    type="file" 
+                    id="body-file-input" 
+                    style={{ display: 'none' }} 
+                    accept="image/*"
+                    onChange={handleBodyFileSelect}
+                  />
                 </div>
                 
                 <div className={`editor-content-container ${previewMode ? 'split' : ''}`}>
@@ -760,6 +1067,10 @@ export default function BlogAdmin() {
                     onChange={handleInputChange}
                     rows="15"
                     placeholder="Write your article here. Use '### Heading' for sections, '**text**' for bold, and '-' for lists..."
+                    className={isDragOverTextarea ? 'drag-over' : ''}
+                    onDragOver={handleTextareaDragOver}
+                    onDragLeave={handleTextareaDragLeave}
+                    onDrop={handleTextareaDrop}
                     required
                   />
                   
@@ -824,6 +1135,53 @@ export default function BlogAdmin() {
                   </li>
                   <li>Commit and push the code changes to GitHub. The static site will pre-render your new page automatically!</li>
                 </ol>
+              </div>
+
+              <div className="github-settings-widget">
+                <h4>GitHub Auto-Deploy Settings</h4>
+                <p className="settings-help">Enter your GitHub credentials to enable one-click publishing directly from this dashboard. Saved securely in your browser's local storage.</p>
+                <div className="form-group">
+                  <label htmlFor="git-repo">Repository (owner/name)</label>
+                  <input 
+                    type="text" 
+                    id="git-repo" 
+                    value={gitRepo} 
+                    onChange={(e) => {
+                      setGitRepo(e.target.value);
+                      localStorage.setItem('regen_git_repo', e.target.value);
+                    }}
+                    placeholder="e.g. owner/repo"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="git-branch">Branch</label>
+                  <input 
+                    type="text" 
+                    id="git-branch" 
+                    value={gitBranch} 
+                    onChange={(e) => {
+                      setGitBranch(e.target.value);
+                      localStorage.setItem('regen_git_branch', e.target.value);
+                    }}
+                    placeholder="main"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="git-token">Personal Access Token (PAT)</label>
+                  <input 
+                    type="password" 
+                    id="git-token" 
+                    value={gitToken} 
+                    onChange={(e) => {
+                      setGitToken(e.target.value);
+                      localStorage.setItem('regen_git_token', e.target.value);
+                    }}
+                    placeholder="ghp_xxxxxxxxxxxx"
+                  />
+                </div>
+                {gitToken && (
+                  <p className="settings-active-status">✨ One-click publishing active!</p>
+                )}
               </div>
             </aside>
           </div>

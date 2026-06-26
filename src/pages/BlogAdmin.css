@@ -759,3 +759,155 @@
   background-color: var(--color-bg-light);
   cursor: pointer;
 }
+
+/* -------------------------------------------------------------
+ * Cover Image Dropzone & Preview Styles
+ * ------------------------------------------------------------- */
+.cover-image-upload-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.cover-image-dropzone {
+  width: 100%;
+  height: 180px;
+  border: 2px dashed rgba(0, 67, 117, 0.2);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-bg-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: var(--transition-fast);
+}
+
+.cover-image-dropzone:hover,
+.cover-image-dropzone.dragover {
+  border-color: var(--color-accent);
+  background-color: rgba(0, 159, 222, 0.04);
+}
+
+.dropzone-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.dropzone-placeholder svg {
+  stroke: rgba(0, 67, 117, 0.4);
+  margin-bottom: 4px;
+}
+
+.dropzone-placeholder p span {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.dropzone-preview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.dropzone-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dropzone-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(15, 36, 53, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--transition-fast);
+}
+
+.dropzone-preview:hover .dropzone-overlay {
+  opacity: 1;
+}
+
+.dropzone-overlay span {
+  color: var(--color-text-light);
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 1px solid var(--color-text-light);
+  padding: 8px 16px;
+  border-radius: var(--border-radius-sm);
+}
+
+/* -------------------------------------------------------------
+ * Dragover text area overlay
+ * ------------------------------------------------------------- */
+.editor-content-container textarea.drag-over {
+  border: 2px dashed var(--color-accent);
+  background-color: rgba(0, 159, 222, 0.04);
+  box-shadow: 0 0 0 4px rgba(0, 159, 222, 0.15);
+}
+
+/* -------------------------------------------------------------
+ * GitHub Settings Widget & Action Buttons
+ * ------------------------------------------------------------- */
+.btn-admin-nav.publish-git {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-text-light);
+}
+
+.btn-admin-nav.publish-git:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.btn-admin-nav.publish-git:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.github-settings-widget {
+  background-color: var(--color-bg-white);
+  padding: 30px;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 67, 117, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.github-settings-widget h4 {
+  font-size: 1.05rem;
+  color: var(--color-text-dark);
+  border-bottom: 1px solid rgba(0, 67, 117, 0.08);
+  padding-bottom: 10px;
+}
+
+.settings-help {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+
+.settings-active-status {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f5132;
+  background-color: #d1e7dd;
+  padding: 6px 12px;
+  border-radius: var(--border-radius-sm);
+  text-align: center;
+}
