@@ -53,9 +53,6 @@ export default function Header() {
           <NavLink to="/treatment" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
             Treatment
           </NavLink>
-          <NavLink to="/blog" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-            Blog
-          </NavLink>
         </nav>
 
         {/* Center Logo */}
@@ -79,6 +76,9 @@ export default function Header() {
           </div>
           <NavLink to="/diagnostics" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
             Diagnostics
+          </NavLink>
+          <NavLink to="/blog" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+            Blog
           </NavLink>
           <NavLink to="/contact" className="nav-link nav-btn">
             Contact
@@ -105,9 +105,6 @@ export default function Header() {
         </NavLink>
         <NavLink to="/treatment" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           Treatment
-        </NavLink>
-        <NavLink to="/blog" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-          Blog
         </NavLink>
         
         {/* Mobile Dropdown Toggler */}
@@ -151,6 +148,9 @@ export default function Header() {
 
         <NavLink to="/diagnostics" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
           Diagnostics
+        </NavLink>
+        <NavLink to="/blog" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+          Blog
         </NavLink>
         <NavLink to="/contact" className="nav-btn" style={{ textAlign: 'center', marginTop: '16px' }}>
           Contact
