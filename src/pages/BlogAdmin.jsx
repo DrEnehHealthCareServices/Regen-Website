@@ -1101,7 +1101,7 @@ export default function BlogAdmin() {
                 </div>
               </div>
 
-              <button type="submit" className="btn-save-draft">Save Draft locally</button>
+              <button type="submit" className="btn-save-draft">Save Draft</button>
             </form>
 
             {/* SEO Auditor Column */}
@@ -1135,7 +1135,7 @@ export default function BlogAdmin() {
               <div className="deployment-instructions">
                 <h4>Automatic Publishing Active</h4>
                 <p style={{ fontSize: '0.85rem', lineHeight: '1.5', margin: '0' }}>
-                  Simply click <strong>"Publish to GitHub"</strong> in the top header to save changes and go live.
+                  Simply click <strong>"Publish Article"</strong> in the top header to save changes and go live.
                   <br /><br />
                   The website will automatically build and deploy. Please wait <strong>2 minutes</strong> for your changes to appear live.
                 </p>
