@@ -134,7 +134,6 @@ export default function BlogAdmin() {
   const [isDragOverCover, setIsDragOverCover] = useState(false);
   const [isDragOverTextarea, setIsDragOverTextarea] = useState(false);
 
-  const [gitToken, setGitToken] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('regen_git_token') || '' : ''));
   const [isPublishing, setIsPublishing] = useState(false);
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -257,18 +256,13 @@ export default function BlogAdmin() {
   };
 
   const handlePublishToGitHub = async () => {
-    if (!gitToken) {
-      showStatus('Please configure your GitHub Personal Access Token in the settings below first.', 'error');
-      return;
-    }
-
     if (!currentPost.title || !currentPost.slug || !currentPost.content) {
       showStatus('Please fill in the title, slug, and content fields first.', 'error');
       return;
     }
 
     setIsPublishing(true);
-    showStatus('Connecting to GitHub...', 'success');
+    showStatus('Connecting to publishing service...', 'success');
 
     try {
       // 1. Format the current post data
@@ -316,63 +310,32 @@ export default function BlogAdmin() {
         backlinks: typeof p.backlinks === 'string' ? JSON.parse(p.backlinks) : p.backlinks
       }));
 
-      const filePath = 'src/data/blogPosts.json';
-      const url = `https://api.github.com/repos/${GIT_REPO}/contents/${filePath}`;
-
-      // 2. Fetch current file metadata (sha) from GitHub
-      showStatus('Fetching database version from GitHub...', 'success');
-      const getRes = await fetch(`${url}?ref=${GIT_BRANCH}`, {
+      // 2. Call the serverless function `/api/publish`
+      showStatus('Publishing changes to server...', 'success');
+      const response = await fetch('/api/publish', {
+        method: 'POST',
         headers: {
-          'Authorization': `token ${gitToken}`,
-          'Accept': 'application/vnd.github.v3+json'
-        }
-      });
-
-      let sha = null;
-      if (getRes.status === 200) {
-        const fileData = await getRes.json();
-        sha = fileData.sha;
-      } else if (getRes.status !== 404) {
-        throw new Error(`Failed to fetch file metadata from GitHub. Status: ${getRes.status}`);
-      }
-
-      // 3. Commit new content to GitHub
-      showStatus('Uploading database update to GitHub...', 'success');
-      const fileContentString = JSON.stringify(formattedPosts, null, 2);
-      const base64Content = btoa(unescape(encodeURIComponent(fileContentString)));
-
-      const putBody = {
-        message: `content: publish blog article "${savedPost.title}" via Admin Portal`,
-        content: base64Content,
-        branch: GIT_BRANCH
-      };
-      if (sha) {
-        putBody.sha = sha;
-      }
-
-      const putRes = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `token ${gitToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/vnd.github.v3+json'
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(putBody)
+        body: JSON.stringify({
+          posts: formattedPosts,
+          title: savedPost.title
+        })
       });
 
-      if (putRes.status === 200 || putRes.status === 201) {
-        // Update local state and save to local storage as well
-        localStorage.setItem('regen_blog_posts', JSON.stringify(
-          updatedPosts.filter(p => p.id !== 'static' && typeof p.id !== 'string')
-        ));
-        setPosts(updatedPosts);
-        setCurrentPost(prev => ({ ...prev, id: savedPost.id }));
-        
-        showStatus('Published successfully! GitHub Actions deployment has started. Live in 1-2 mins.', 'success');
-      } else {
-        const errorData = await putRes.json();
-        throw new Error(errorData.message || 'Failed to update file on GitHub.');
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText || 'Failed to update database via backend.');
       }
+
+      // Update local state and save to local storage as well
+      localStorage.setItem('regen_blog_posts', JSON.stringify(
+        updatedPosts.filter(p => p.id !== 'static' && typeof p.id !== 'string')
+      ));
+      setPosts(updatedPosts);
+      setCurrentPost(prev => ({ ...prev, id: savedPost.id }));
+      
+      showStatus('Published successfully! Vercel build has been triggered. Live in 1-2 mins.', 'success');
     } catch (err) {
       console.error(err);
       showStatus(`Publish error: ${err.message}`, 'error');
@@ -832,15 +795,13 @@ export default function BlogAdmin() {
           </div>
           
           <div className="admin-actions">
-            {gitToken && (
-              <button 
-                className="btn-admin-nav publish-git" 
-                onClick={handlePublishToGitHub}
-                disabled={isPublishing}
-              >
-                {isPublishing ? 'Publishing...' : 'Publish to GitHub'}
-              </button>
-            )}
+            <button 
+              className="btn-admin-nav publish-git" 
+              onClick={handlePublishToGitHub}
+              disabled={isPublishing}
+            >
+              {isPublishing ? 'Publishing...' : 'Publish to GitHub'}
+            </button>
             <button className="btn-admin-nav" onClick={handleCreateNew}>New Post</button>
             <button className="btn-admin-nav outline" onClick={handleDownloadJson}>Download Database</button>
             <button className="btn-admin-nav outline" onClick={handleCopyJson}>Copy Database JSON</button>
@@ -1152,53 +1113,13 @@ export default function BlogAdmin() {
               </div>
 
               <div className="deployment-instructions">
-                {gitToken ? (
-                  <>
-                    <h4>Automatic Publishing Active</h4>
-                    <p style={{ fontSize: '0.85rem', lineHeight: '1.5', margin: '0' }}>
-                      Everything is configured! Simply click <strong>"Publish to GitHub"</strong> in the top header to go live.
-                      <br /><br />
-                      GitHub will automatically build and deploy your site. Please wait <strong>2 minutes</strong> for your new post to appear live on the blog.
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <h4>GitHub Deployment Guide</h4>
-                    <ol>
-                      <li>Enter your credentials in the settings panel below to enable one-click publishing.</li>
-                      <li>Once active, click <strong>"Publish to GitHub"</strong> to deploy. Or manually download and replace the JSON file in the repository.</li>
-                    </ol>
-                  </>
-                )}
+                <h4>Automatic Publishing Active</h4>
+                <p style={{ fontSize: '0.85rem', lineHeight: '1.5', margin: '0' }}>
+                  Simply click <strong>"Publish to GitHub"</strong> in the top header to save changes and go live.
+                  <br /><br />
+                  The website will automatically build and deploy. Please wait <strong>2 minutes</strong> for your changes to appear live.
+                </p>
               </div>
-
-              <details className="github-settings-details">
-                <summary className="github-settings-summary">⚙️ Developer Settings</summary>
-                <div className="github-settings-widget">
-                  <h4>GitHub Auto-Deploy Settings</h4>
-                  <p className="settings-help">
-                    To publish posts instantly, GitHub requires a Personal Access Token (PAT) to verify you have permission to update this site. It is saved securely in your browser's local storage.
-                  </p>
-                  <div className="form-group">
-                    <label htmlFor="git-token">GitHub Access Token</label>
-                    <input 
-                      type="password" 
-                      id="git-token" 
-                      value={gitToken} 
-                      onChange={(e) => {
-                        setGitToken(e.target.value);
-                        localStorage.setItem('regen_git_token', e.target.value);
-                      }}
-                      placeholder="Paste your token (ghp_...)"
-                    />
-                  </div>
-                  {gitToken ? (
-                    <p className="settings-active-status">✨ One-click publishing active!</p>
-                  ) : (
-                    <p className="settings-inactive-status">Enter your token to activate publishing.</p>
-                  )}
-                </div>
-              </details>
             </aside>
           </div>
         )}
