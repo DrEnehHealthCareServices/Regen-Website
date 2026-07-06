@@ -160,11 +160,11 @@
 }
 
 .diag-card.bg-navy {
-  background-color: var(--color-primary-dark);
+  background-color: #01092E;
 }
 
 .diag-card.bg-blue {
-  background-color: var(--color-primary);
+  background-color: #015C91;
 }
 
 .diag-card-top {

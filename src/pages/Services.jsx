@@ -130,25 +130,31 @@ export default function Services() {
           </div>
 
           <div className="services-grid">
-            {serviceCards.map((item, idx) => {
-              if (item.type === 'image') {
+            {(() => {
+              let textCardCount = 0;
+              return serviceCards.map((item, idx) => {
+                if (item.type === 'image') {
+                  return (
+                    <div key={idx} className="services-image-card">
+                      <img src={item.src} alt={item.alt} className="services-card-img" />
+                    </div>
+                  );
+                }
+
+                const bgClass = textCardCount % 2 === 0 ? 'navy' : 'blue';
+                textCardCount++;
+
                 return (
-                  <div key={idx} className="services-image-card">
-                    <img src={item.src} alt={item.alt} className="services-card-img" />
+                  <div key={idx} className={`services-text-card bg-${bgClass}`}>
+                    <h3 className="services-card-title">{item.title}</h3>
+                    <p className="services-card-text">{item.text}</p>
+                    <Link to={item.path} className="services-card-link">
+                      Learn more ↗
+                    </Link>
                   </div>
                 );
-              }
-
-              return (
-                <div key={idx} className={`services-text-card bg-${item.bgType}`}>
-                  <h3 className="services-card-title">{item.title}</h3>
-                  <p className="services-card-text">{item.text}</p>
-                  <Link to={item.path} className="services-card-link">
-                    Learn more ↗
-                  </Link>
-                </div>
-              );
-            })}
+              });
+            })()}
           </div>
         </div>
       </section>

@@ -174,11 +174,11 @@
 }
 
 .iv-card.bg-navy {
-  background-color: var(--color-primary-dark); /* #002747 */
+  background-color: #01092E;
 }
 
 .iv-card.bg-blue {
-  background-color: var(--color-primary); /* #004375 */
+  background-color: #015C91;
 }
 
 .iv-card-title {
