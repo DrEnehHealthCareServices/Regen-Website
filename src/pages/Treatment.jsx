@@ -152,7 +152,7 @@ export default function Treatment() {
             <div className="treatment-card bg-blue">
               <h3 className="treatment-card-title">Men's<br />Health</h3>
               <div className="treatment-card-image-wrapper">
-                <img src="/assets/3/Rectangle 17-2.png" alt="Men's Health" className="treatment-card-img" />
+                <img src="/assets/Extra/whatsapp-image-6.58.59.jpeg" alt="Men's health and vitality therapies" className="treatment-card-img" />
               </div>
               <div className="treatment-card-pills">
                 <span className="treatment-pill">Erectile Dysfunction</span>
