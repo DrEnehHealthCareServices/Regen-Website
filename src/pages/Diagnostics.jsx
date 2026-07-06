@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone } from 'lucide-react';
+import { Phone, Check } from 'lucide-react';
 import './Diagnostics.css';
 
 export default function Diagnostics() {
@@ -158,7 +158,7 @@ export default function Diagnostics() {
             <div className="diag-matter-list">
               {mattersList.map((text, idx) => (
                 <div key={idx} className="diag-matter-item">
-                  <div className="diag-matter-badge">{idx + 1}</div>
+                  <div className="diag-matter-badge"><Check size={18} strokeWidth={3.5} /></div>
                   <p className="diag-matter-text">{text}</p>
                 </div>
               ))}
@@ -175,7 +175,7 @@ export default function Diagnostics() {
             <div className="split-list">
               {whotsfor.map((text, idx) => (
                 <div key={idx} className="split-item border-dark">
-                  <div className="split-badge bg-navy">{idx + 1}</div>
+                  <div className="split-badge bg-navy"><Check size={18} strokeWidth={3.5} /></div>
                   <p className="split-text color-dark">{text}</p>
                 </div>
               ))}
@@ -191,7 +191,7 @@ export default function Diagnostics() {
             <div className="split-list">
               {whyChooseUs.map((text, idx) => (
                 <div key={idx} className="split-item border-light">
-                  <div className="split-badge bg-badge-light">{idx + 1}</div>
+                  <div className="split-badge bg-badge-light"><Check size={18} strokeWidth={3.5} /></div>
                   <p className="split-text color-light">{text}</p>
                 </div>
               ))}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone } from 'lucide-react';
+import { Phone, Check } from 'lucide-react';
 import './HormonalReplacement.css';
 
 export default function HormonalReplacement() {
@@ -166,7 +166,7 @@ export default function HormonalReplacement() {
               <div className="hrt-wcu-list">
                 {whyChooseUs.map((text, idx) => (
                   <div key={idx} className="hrt-wcu-item">
-                    <div className="hrt-wcu-badge">{idx + 1}</div>
+                    <div className="hrt-wcu-badge"><Check size={18} strokeWidth={3.5} /></div>
                     <p className="hrt-wcu-text">{text}</p>
                   </div>
                 ))}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone } from 'lucide-react';
+import { Phone, Check } from 'lucide-react';
 import './PeptideSenolytics.css';
 
 export default function PeptideSenolytics() {
@@ -161,7 +161,7 @@ export default function PeptideSenolytics() {
             <div className="split-list">
               {benefits.map((text, idx) => (
                 <div key={idx} className="split-item border-dark">
-                  <div className="split-badge bg-navy">{idx + 1}</div>
+                  <div className="split-badge bg-navy"><Check size={18} strokeWidth={3.5} /></div>
                   <p className="split-text color-dark">{text}</p>
                 </div>
               ))}
@@ -177,7 +177,7 @@ export default function PeptideSenolytics() {
             <div className="split-list">
               {whotsfor.map((text, idx) => (
                 <div key={idx} className="split-item border-light">
-                  <div className="split-badge bg-badge-light">{idx + 1}</div>
+                  <div className="split-badge bg-badge-light"><Check size={18} strokeWidth={3.5} /></div>
                   <p className="split-text color-light">{text}</p>
                 </div>
               ))}
