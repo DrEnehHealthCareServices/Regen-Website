@@ -81,7 +81,7 @@ export default function Treatment() {
       {/* 1. Hero Section */}
       <section className="treatment-hero">
         <div className="treatment-hero-content anim-fade-up">
-          <h1 className="treatment-hero-title">Treatments</h1>
+          <h1 className="treatment-hero-title">Treatment</h1>
           <p className="treatment-hero-desc">
             At <strong>ReGen Care Africa</strong>, we provide advanced regenerative and functional medicine treatments
             designed to heal at the cellular level, manage chronic conditions, and restore vitality. Our
