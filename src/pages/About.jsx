@@ -136,7 +136,7 @@ export default function About() {
 
         <div className="wwd-grid">
           <div className="wwd-image-col">
-            <img src="/assets/Extra/WhatsApp Image 2026-06-28 at 7.04.07 PM.jpeg" alt="Advanced laboratory equipment and regenerative medicine research" />
+            <img src="/assets/Extra/whatsapp-image-7.04.07.jpeg" alt="Advanced laboratory equipment and regenerative medicine research" />
           </div>
           <div className="wwd-cards-grid">
             {whatWeDoCards.map((card, idx) => {
@@ -180,7 +180,7 @@ export default function About() {
             })}
           </div>
           <div className="wcu-image-col">
-            <img src="/assets/Extra/WhatsApp Image 2026-06-28 at 7.01.51 PM.jpeg" alt="Pioneering medical and clinical experts at ReGen Care Africa" />
+            <img src="/assets/Extra/whatsapp-image-7.01.51.jpeg" alt="Pioneering medical and clinical experts at ReGen Care Africa" />
           </div>
         </div>
       </section>
