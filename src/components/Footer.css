@@ -3,7 +3,7 @@
  * ------------------------------------------------------------- */
 
 .site-footer {
-  background: var(--grad-footer);
+  background-color: #015C91;
   color: rgba(255, 255, 255, 0.7);
   padding: 80px 5vw 40px;
   margin-top: auto;
