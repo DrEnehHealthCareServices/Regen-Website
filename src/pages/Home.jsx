@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Phone } from 'lucide-react';
+import { Phone, Check } from 'lucide-react';
 import './Home.css';
 
 export default function Home() {
@@ -77,19 +77,19 @@ export default function Home() {
             {/* The left side elements overlap the left-hand blue fade of Group 142.png */}
             <div className="who-we-are-overlay">
               <div className="bullet-card">
-                <div className="bullet-num">1</div>
+                <div className="bullet-num"><Check size={18} strokeWidth={3.5} /></div>
                 <div className="bullet-text">Personalized, concierge-level healthcare.</div>
               </div>
               <div className="bullet-card">
-                <div className="bullet-num">2</div>
+                <div className="bullet-num"><Check size={18} strokeWidth={3.5} /></div>
                 <div className="bullet-text">Cutting-edge regenerative & aesthetic therapies.</div>
               </div>
               <div className="bullet-card">
-                <div className="bullet-num">3</div>
+                <div className="bullet-num"><Check size={18} strokeWidth={3.5} /></div>
                 <div className="bullet-text">Partnerships with global medical leaders.</div>
               </div>
               <div className="bullet-card">
-                <div className="bullet-num">4</div>
+                <div className="bullet-num"><Check size={18} strokeWidth={3.5} /></div>
                 <div className="bullet-text">Multidisciplinary team of experts.</div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone } from 'lucide-react';
+import { Phone, Check } from 'lucide-react';
 import './Treatment.css';
 
 export default function Treatment() {
@@ -201,7 +201,7 @@ export default function Treatment() {
             <div className="why-diff-list">
               {differences.map((diff) => (
                 <div key={diff.num} className="why-diff-item">
-                  <div className="why-diff-badge">{diff.num}</div>
+                  <div className="why-diff-badge"><Check size={20} strokeWidth={3.5} /></div>
                   <p className="why-diff-text">{diff.text}</p>
                 </div>
               ))}

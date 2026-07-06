@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Check } from 'lucide-react';
 import './About.css';
 
 export default function About() {
@@ -143,7 +144,7 @@ export default function About() {
               const blue = isBlueCard(idx, 3);
               return (
                 <div key={idx} className={`wwd-grid-card ${blue ? 'blue' : 'white'}`}>
-                  <div className="wwd-card-num">{card.num}</div>
+                  <div className="wwd-card-num"><Check size={18} strokeWidth={3.5} /></div>
                   <p className="wwd-card-text">{card.text}</p>
                 </div>
               );
@@ -173,7 +174,7 @@ export default function About() {
               const blue = isBlueCard(idx, 3);
               return (
                 <div key={idx} className={`wwd-grid-card ${blue ? 'blue' : 'white'}`}>
-                  <div className="wwd-card-num">{card.num}</div>
+                  <div className="wwd-card-num"><Check size={18} strokeWidth={3.5} /></div>
                   <p className="wwd-card-text">{card.text}</p>
                 </div>
               );
