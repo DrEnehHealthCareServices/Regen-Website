@@ -141,7 +141,7 @@ export default function Home() {
       {/* 4. CTA (Take Control Of Your Health Today) */}
       <section className="cta-section">
         <div className="cta-content">
-          <h2 className="cta-title">Take Control Of Your Health Today</h2>
+          <h2 className="cta-title">Take Control Of <br className="desktop-br" />Your Health Today</h2>
           <p className="cta-description">
             Your journey to vitality, healing, and longevity starts with one step.
             Don't wait—our specialists are ready to guide you.

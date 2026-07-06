@@ -8,7 +8,8 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background-image: var(--grad-hero-overlay), url('/assets/1/Group 168.png');
+  background-color: #005F8A;
+  background-image: linear-gradient(to right, rgba(0, 95, 138, 0.92) 0%, rgba(0, 95, 138, 0.82) 40%, rgba(0, 95, 138, 0.3) 100%), url('/assets/1/Group 168.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -148,6 +149,11 @@
   transition: all var(--transition-normal);
 }
 
+.bullet-card:nth-child(2),
+.bullet-card:nth-child(3) {
+  background: linear-gradient(to right, #ffffff 0%, #A1DCFF 100%);
+}
+
 .bullet-card:hover {
   transform: translateX(10px);
   box-shadow: var(--shadow-md);
@@ -205,6 +211,7 @@
   box-shadow: var(--shadow-md);
   transition: all var(--transition-normal);
   cursor: pointer;
+  background-color: #015C91;
 }
 
 .expertise-card.image-card {
@@ -219,7 +226,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--grad-card-overlay);
+  background: linear-gradient(to top, rgba(1, 92, 145, 0.95) 0%, rgba(1, 92, 145, 0.7) 60%, rgba(1, 92, 145, 0.1) 100%);
   z-index: 1;
   transition: opacity var(--transition-normal);
 }
@@ -269,6 +276,7 @@
   background-size: cover;
   background-position: center;
   box-sizing: border-box;
+  background-color: #015C91;
 }
 
 .explore-card::after {
@@ -278,7 +286,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--grad-card-overlay);
+  background: linear-gradient(to top, rgba(1, 92, 145, 0.95) 0%, rgba(1, 92, 145, 0.7) 60%, rgba(1, 92, 145, 0.1) 100%);
   z-index: 1;
   transition: opacity var(--transition-normal);
 }
@@ -371,6 +379,10 @@
   font-weight: bold;
 }
 
+.desktop-br {
+  display: block;
+}
+
 .cta-description {
   font-size: clamp(1.1rem, 1.3vw, 1.35rem);
   color: rgba(255, 255, 255, 0.9);
@@ -437,5 +449,9 @@
   
   .expertise-card {
     height: 350px;
+  }
+
+  .desktop-br {
+    display: none;
   }
 }
