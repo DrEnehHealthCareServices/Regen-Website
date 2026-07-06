@@ -137,6 +137,10 @@
   z-index: 2;
 }
 
+.who-we-are-mobile-img-wrapper {
+  display: none;
+}
+
 /* Bullet list cards */
 .bullet-card {
   background: var(--color-bg-white);
@@ -420,6 +424,21 @@
   
   .who-we-are-overlay {
     padding: 0;
+  }
+
+  .who-we-are-mobile-img-wrapper {
+    display: block;
+    margin: 20px -30px -30px -30px;
+    overflow: hidden;
+  }
+
+  .who-we-are-mobile-img {
+    width: 100%;
+    display: block;
+    height: auto;
+    max-height: 380px;
+    object-fit: cover;
+    object-position: center;
   }
   
   .bullet-card:hover {

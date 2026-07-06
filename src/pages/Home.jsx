@@ -93,9 +93,11 @@ export default function Home() {
                 <div className="bullet-text">Multidisciplinary team of experts.</div>
               </div>
             </div>
-            {/* Right side is intentionally empty because the background image (Group 142.png) 
-                already contains the clinical photo in its right column. */}
-            <div></div>
+            {/* Right side is empty on desktop because the background image (Group 142.png) 
+                already contains the clinical photo, but renders the cropped photo on mobile. */}
+            <div className="who-we-are-mobile-img-wrapper">
+              <img src="/assets/1/who-we-are-photo.png" alt="Clinical experts at ReGen Care Africa" className="who-we-are-mobile-img" />
+            </div>
           </div>
         </div>
       </section>
